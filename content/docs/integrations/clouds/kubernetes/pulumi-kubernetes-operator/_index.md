@@ -42,6 +42,7 @@ Deploying Pulumi stacks using Kubernetes provides the capability to build out CI
 - **[Installation](/docs/integrations/clouds/kubernetes/pulumi-kubernetes-operator/installation/)** — install the operator, create a service account, and configure Pulumi Cloud access and Pulumi ESC.
 - **[Defining stacks](/docs/integrations/clouds/kubernetes/pulumi-kubernetes-operator/defining-stacks/)** — create a `Stack` resource from a Git repository, Flux source, or Program object, and set its configuration and environment variables.
 - **[Stack operations](/docs/integrations/clouds/kubernetes/pulumi-kubernetes-operator/stack-operations/)** — drift detection, state refresh, cleanup, prerequisites, external triggers, and preview mode.
+- **[Rolling out changes](/docs/integrations/clouds/kubernetes/pulumi-kubernetes-operator/rolling-out-changes/)** — approve changes upstream and preview before they reach the operator.
 
 Detailed documentation on the Stack API is available in the [operator repository][pko-stacks].
 
@@ -49,7 +50,7 @@ Detailed documentation on the Stack API is available in the [operator repository
 
 ## Use with Argo CD
 
-You can combine PKO with Argo CD to manage the lifecycle of your `Stack` resources using the GitOps paradigm, driving Pulumi deployments from the Argo CD UI or CLI. For comprehensive guidance—including a trunk-based GitOps workflow, preview environments, sync waves, and multi-cluster patterns—see the dedicated [Argo CD with Pulumi Kubernetes Operator](/docs/iac/operations/continuous-delivery/argocd/) documentation.
+You can combine PKO with Argo CD to manage the lifecycle of your `Stack` resources using the GitOps paradigm, driving Pulumi deployments from the Argo CD UI or CLI. For comprehensive guidance—including a trunk-based GitOps workflow, preview environments, and sync waves—see the dedicated [Argo CD with Pulumi Kubernetes Operator](/docs/iac/operations/continuous-delivery/argocd/) documentation.
 
 ## More information
 
