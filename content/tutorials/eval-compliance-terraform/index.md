@@ -9,9 +9,6 @@ description: Learn how to use Pulumi Insights to evaluate compliance of resource
 # A similar description used for search results and social-media previews.
 meta_desc: Learn how to use Pulumi Insights to evaluate compliance of resources that are deployed with Terraform.
 
-# An image for the tutorial. It appears on tutorial page and in social-media previews.
-meta_image: meta.png
-
 # An optional video for the tutorial. When present, it appears at the top of the page, replacing
 # the meta image. YouTube and HTML5 video sources are supported.
 # video:
@@ -35,8 +32,8 @@ youll_learn:
 prereqs:
     - The [Pulumi CLI](/docs/install/)
     - A [Pulumi Cloud Team, Enterprise, or Business Critical account](https://app.pulumi.com/signup)
-    - An [ESC environment and AWS credentials created and configured](/docs/insights/get-started/begin/)
-    - A [Pulumi Insights account](/docs/insights/get-started/create-accounts/)
+    - An [ESC environment and AWS credentials created and configured](/docs/insights/discovery/accounts/#configure-esc-credentials)
+    - A [Pulumi Insights account](/docs/insights/discovery/accounts/)
     - An [Amazon Web Services](https://aws.amazon.com/) account
     - The [AWS CLI](https://aws.amazon.com/cli/) configured for use with your AWS account
     - The [Terraform CLI](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli)
@@ -229,7 +226,7 @@ As the scan progresses, you can monitor policy compliance in real-time through t
 
 ![Insights Policies - Policy Violations](/tutorials/eval-compliance-terraform/assets/insights-policy-violations.png)
 
-You should see a violation entry for the publically accessible security group in the list. Each violation entry provides detailed information about:
+You should see a violation entry for the publicly accessible security group in the list. Each violation entry provides detailed information about:
 
 - The specific resource that triggered the violation
 - Which policy rule was violated

@@ -2,7 +2,6 @@
 title: What Is Infrastructure as Software?
 meta_desc: "Infrastructure as Software is IaC written in general-purpose programming languages. Learn how it differs from DSL-based IaC and where it fits in practice."
 
-meta_image: /images/what-is/what-is-infrastructure-as-software-meta.png
 type: what-is
 page_title: "Infrastructure as Software: The Next Step in Cloud Management"
 
@@ -78,7 +77,7 @@ The everyday capabilities that come for free with IaS are the ones DSL-based IaC
 * **Real types.** A misspelled property name, a missing required field, a type mismatch, or an invalid enum value all fail at compile time rather than at `apply` time.
 * **Real abstractions.** A reusable VPC pattern becomes a class whose constructor takes typed inputs. The class can be parameterized, subclassed, and shipped as a package. A repeating module becomes a `new MyVpc(...)`, not a folder of copy-pasted templates.
 * **Standard package management.** Internal components ship through npm, PyPI, Go modules, NuGet, or Maven, depending on the language. Versions follow semver. Dependencies are locked.
-* **Real testing.** Use the test runner that already works for your application code (Jest, pytest, `go test`, xUnit, JUnit) for your IaC. Pulumi's [test mocks](/docs/iac/using-pulumi/testing/unit/) let unit tests run in memory without touching the cloud.
+* **Real testing.** Use the test runner that already works for your application code (Jest, pytest, `go test`, xUnit, JUnit) for your IaC. Pulumi's [test mocks](/docs/iac/guides/testing/unit/) let unit tests run in memory without touching the cloud.
 * **IDE-grade tooling.** Autocomplete, jump-to-definition, refactoring, inline error squiggles. The same VS Code, JetBrains, or Neovim setup that works for the app works for the infra.
 * **Policy as code in the same language.** [Pulumi policies](/docs/insights/policy/) can be written in TypeScript, JavaScript, Python, or OPA's Rego against the actual resource model. The same engineers who wrote the infrastructure can write the policies that govern it.
 * **Composability with non-infra code.** Pull configuration from an internal service, fetch a list of allowed regions from a database, compute a resource name from a feature-flag value. Any of those is one library call away in IaS; they require an external preprocessing step in a DSL.
@@ -131,6 +130,8 @@ Pulumi was built around the IaS model from day one.
 * **Automation API.** Embed `pulumi up`, `pulumi preview`, and `pulumi destroy` inside any program that needs to provision infrastructure programmatically.
 * **CI/CD-native.** Pulumi runs in every major CI/CD system. The [continuous delivery guide](/docs/iac/guides/continuous-delivery/) covers the common patterns.
 
+The dividing line between IaC and IaS isn't syntax preference, it's whether your infrastructure can be called by other code. Once a cloud resource is an ordinary software object, the IaC engine becomes a library, and provisioning stops being a separate operational silo and becomes something you can compose into platforms, products, and pipelines the same way you compose any other function. That reach, not the cleaner loops or the better autocomplete, is what DSL-based IaC can't follow you into.
+
 [Get started with Pulumi](/docs/get-started/) to provision and manage cloud infrastructure in the language your team already uses.
 
 ## Frequently asked questions about infrastructure as software
@@ -157,7 +158,7 @@ YAML works fine for small footprints and simple configurations. Most teams that 
 
 ### How does IaS support testing?
 
-The same way any other software does. Use the language's standard test runner (Jest, pytest, `go test`, xUnit), use Pulumi's test mocks to replace cloud calls in unit tests, and use the automation API to spin up ephemeral stacks for integration tests. See [how to step up cloud infrastructure testing](/what-is/how-to-step-up-cloud-infrastructure-testing/) for the layered testing model.
+The same way any other software does. Use the language's standard test runner (Jest, pytest, `go test`, xUnit), use Pulumi's test mocks to replace cloud calls in unit tests, and use the automation API to spin up ephemeral stacks for integration tests. See [how to step up cloud infrastructure testing](/blog/how-to-test-infrastructure-as-code/) for the layered testing model.
 
 ### Does IaS replace platform engineering tools?
 
@@ -186,4 +187,5 @@ Related reading:
 * [What is Platform Engineering?](/what-is/what-is-platform-engineering/)
 * [Infrastructure as Code for DevOps](/what-is/infrastructure-as-code-for-devops/)
 * [Infrastructure as Code for Kubernetes](/what-is/infrastructure-as-code-for-kubernetes/)
-* [How to Step Up Cloud Infrastructure Testing](/what-is/how-to-step-up-cloud-infrastructure-testing/)
+* [How to Test Infrastructure as Code](/blog/how-to-test-infrastructure-as-code/)
+* [Most Effective Infrastructure as Code (IaC) Tools](/blog/infrastructure-as-code-tools/)

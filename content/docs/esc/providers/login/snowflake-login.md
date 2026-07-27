@@ -59,7 +59,7 @@ Replace `<role>` with the role that has the necessary permissions for your use c
 
 ## Using with Pulumi ESC
 
-Once you've configured OIDC in Snowflake, you can use the `snowflake-login` provider in your Pulumi ESC environment:
+Once you've configured OIDC in Snowflake, you can use the `snowflake-login` provider in your Pulumi ESC environment. The outputs are consumed by the [Pulumi Snowflake provider](https://www.pulumi.com/registry/packages/snowflake/), the Snowflake SDKs, and the `snowsql` CLI:
 
 ```yaml
 values:
@@ -70,6 +70,12 @@ values:
           account: myorganization-account
           user: ESC_LOGIN_USER
           role: ESC_ROLE  # Optional
+  environmentVariables:
+    # Consumed by the Pulumi Snowflake provider, the Snowflake SDKs, and the snowsql CLI
+    SNOWFLAKE_ACCOUNT: ${snowflake.login.account}
+    SNOWFLAKE_USER: ${snowflake.login.user}
+    SNOWFLAKE_AUTHENTICATOR: OAUTH
+    SNOWFLAKE_TOKEN: ${snowflake.login.token}
 ```
 
 ### Validation
@@ -98,18 +104,14 @@ You can validate your configuration is working by connecting to snowflake with u
   --token=<snowflake.login.token>
 ```
 
-## Inputs
+## Schema reference
 
-| Property            | Type   | Description                                                                             |
-|---------------------|--------|-----------------------------------------------------------------------------------------|
-| `oidc.account`      | string | Required. Snowflake account identifier.                                                 |
-| `oidc.user`         | string | Required. User login name.                                                              |
-| `oidc.role`         | string | Optional. Role to assume. See [Snowflake OAuth Scopes](https://docs.snowflake.com/en/user-guide/oauth-ext-overview#scopes) for more information. |
+{{< esc-schema-updated >}}
 
-## Outputs
+### Inputs
 
-| Property   | Type   | Description                              |
-|------------|--------|------------------------------------------|
-| `account`  | string | Snowflake account identifier.            |
-| `user`     | string | User login name.                         |
-| `token`    | string | OAuth token (stored as a secret).        |
+{{< esc-schema type="provider" name="snowflake-login" section="inputs" >}}
+
+### Outputs
+
+{{< esc-schema type="provider" name="snowflake-login" section="outputs" >}}

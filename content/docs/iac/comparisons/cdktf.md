@@ -1,9 +1,10 @@
 ---
 title_tag: "Pulumi vs. CDKTF"
+faq_schema: true
+authors: ["joe-duffy"]
 meta_desc: "Compare Pulumi and CDK for Terraform (CDKTF, deprecated December 2025): language support, providers, state, secrets, and migration paths — side-by-side."
 title: CDKTF
 h1: Pulumi vs. CDKTF
-meta_image: /images/docs/meta-images/docs-meta.png
 menu:
     iac:
         name: CDKTF

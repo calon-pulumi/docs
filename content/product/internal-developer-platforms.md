@@ -1,7 +1,7 @@
 ---
 title: "Internal Developer Platform for Self-Service – Pulumi IDP"
 type: page
-layout: product-page
+layout: template-page
 
 meta_desc: Build your internal developer platform with Pulumi. Enable self-service infrastructure with enterprise governance.
 meta_image: /images/product/internal-developer-platforms/idp-meta.png
@@ -74,7 +74,7 @@ sections:
 
       - **Low-Code**: Simple YAML for standard patterns. Platform teams create the templates, engineers fill in the values.
 
-      - **No-Code**: Deploy through Pulumi's project wizard or integrate with [Backstage](/docs/idp/concepts/backstage-plugin/). Click to provision.
+      - **No-Code**: Deploy through Pulumi's project wizard or integrate with [Backstage](/docs/idp/integrations/backstage-plugin/). Click to provision.
 
       - **REST API**: Programmatic access for custom tools and workflows. Build your own interfaces.
     image: /images/product/internal-developer-platforms/idp-self-service.svg

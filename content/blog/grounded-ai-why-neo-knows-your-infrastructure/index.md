@@ -3,8 +3,8 @@ title: "Grounded AI: Why Neo Knows Your Infrastructure"
 meta_desc: "Pulumi Neo doesn't just generate code—it reasons about your actual infrastructure using context lakes. Learn why grounded AI beats generic LLMs for DevOps."
 date: 2025-10-24
 draft: false
-meta_image: meta.png
 tags: ["ai", "devops", "pulumi-neo", "platform-engineering", "infrastructure-as-code", "context-lake"]
+category: product
 authors:
   - engin-diri
 ---
@@ -85,6 +85,6 @@ Grounded AI won't replace engineers. But it will change what engineering means: 
 
 ## Try it yourself
 
-Want to see what infrastructure cognition looks like in practice? [Get started with Neo](/docs/ai/get-started/) and ask it about your infrastructure. Watch it reason through drift detection, generate fix plans, or explain complex resource relationships in plain English.
+Want to see what infrastructure cognition looks like in practice? [Get started with Neo](/docs/ai/get-started/) and ask it about your infrastructure. Watch it reason through drift detection, generate fix plans, or explain complex resource relationships in plain English. For a wider survey of the category, see our guide to the [best AI infrastructure tools](/blog/ai-infrastructure-tools/).
 
 Neo is available today for teams using Pulumi Cloud. The cognitive layer isn't coming. It's already here.

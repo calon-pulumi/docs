@@ -3,13 +3,13 @@ title_tag: "Build a Component"
 meta_desc: "Learn the process for building a custom Pulumi Component."
 title: Build a Component
 h1: Build a Component
-meta_image: /images/docs/meta-images/docs-meta.png
 menu:
     iac:
         name: Build a Component
         parent: iac-guides-components
         weight: 10
 aliases:
+- /docs/reference/component-tutorial/
 - /docs/iac/using-pulumi/build-a-component/
 - /docs/iac/using-pulumi/extending-pulumi/build-a-component/
 ---
@@ -27,11 +27,9 @@ This guide will walk you through the steps of making a [Pulumi Component](/docs/
 
 ## Why Write a Component?
 
-Pulumi Components provide a way to encapsulate best practices, ensuring that security policies and deployment patterns remain consistent across projects. They also help reduce code duplication by allowing you to define reusable infrastructure patterns. By structuring infrastructure as components, maintainability improves, and teams can work more efficiently.
+Components encapsulate best practices, propagate resource options to every resource they create, appear as a single node in your stack, and can be shared across teams and languages.
 
-- **Sharing and Reusability**: Do more with less code. Don't repeat yourself.
-- **Best Practices and Policy**: Encode company standards and policy.
-- **Multi-language Support**: When packaged as a Pulumi plugin package, a component written in one language can be consumed from any other Pulumi-supported language via a generated SDK.
+For the full case — including when a plain function is the better choice — see [When to Build a Component](/docs/iac/guides/building-extending/components/when-to-build-a-component/).
 
 ## How It Works
 
@@ -231,7 +229,7 @@ Inputs can be any basic type (e.g. `boolean`, `integer`, `string`) or an `array`
 
 {{% choosable language typescript %}}
 
-Now we can implement the component itself. Components should inherit from `pulumi.ComponentResource`, and should accept the arguments class we just defined in the constructor. All the work for our component happens in the constructor, and outputs are returned via class properties. At the end of the process a calling `self.registerOutputs` signals Pulumi that the process of creating the component resource has completed.
+Now we can implement the component itself. Components should inherit from `pulumi.ComponentResource`, and should accept the arguments class we just defined in the constructor. All the work for our component happens in the constructor, and outputs are returned via class properties. At the end of the process, calling `self.registerOutputs` signals Pulumi that the process of creating the component resource has completed.
 
 ***Example:** `StaticPage.ts` the Component implementation*
 
@@ -241,7 +239,7 @@ Now we can implement the component itself. Components should inherit from `pulum
 
 {{% choosable language python %}}
 
-Now we can implement the component itself. Components should inherit from `pulumi.ComponentResource`, and should accept the arguments class we just defined in the constructor. All the work for our component happens in the constructor, and outputs are returned via class properties. At the end of the process a calling `self.register_outputs` signals Pulumi that the process of creating the component resource has completed.
+Now we can implement the component itself. Components should inherit from `pulumi.ComponentResource`, and should accept the arguments class we just defined in the constructor. All the work for our component happens in the constructor, and outputs are returned via class properties. At the end of the process, calling `self.register_outputs` signals Pulumi that the process of creating the component resource has completed.
 
 ***Example:** `static_page.py` the Component implementation*
 
@@ -260,7 +258,7 @@ Now we can implement the component itself. Component structs should include `pul
 
 {{% choosable language csharp %}}
 
-Now we can implement the component itself. Components should inherit from `Pulumi.ComponentResource`, and should accept the arguments class we just defined in the constructor. All the work for our component happens in the constructor, and outputs are returned via class properties. At the end of the process a calling `this.RegisterOutputs` signals Pulumi that the process of creating the component resource has completed.
+Now we can implement the component itself. Components should inherit from `Pulumi.ComponentResource`, and should accept the arguments class we just defined in the constructor. All the work for our component happens in the constructor, and outputs are returned via class properties. At the end of the process, calling `this.RegisterOutputs` signals Pulumi that the process of creating the component resource has completed.
 
 ***Example:** `StaticPage.cs` the Component implementation*
 
@@ -270,7 +268,7 @@ Now we can implement the component itself. Components should inherit from `Pulum
 
 {{% choosable language java %}}
 
-Now we can implement the component itself. Components should inherit from `Pulumi.ComponentResource`, and should accept the arguments class we just defined in the constructor. All the work for our component happens in the constructor, and outputs are returned via class properties. At the end of the process a calling `this.registerOutputs` signals Pulumi that the process of creating the component resource has completed.
+Now we can implement the component itself. Components should inherit from `Pulumi.ComponentResource`, and should accept the arguments class we just defined in the constructor. All the work for our component happens in the constructor, and outputs are returned via class properties. At the end of the process, calling `this.registerOutputs` signals Pulumi that the process of creating the component resource has completed.
 
 ***Example:** `StaticPage.java` the Component implementation*
 

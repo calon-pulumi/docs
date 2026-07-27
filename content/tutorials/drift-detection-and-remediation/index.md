@@ -5,7 +5,6 @@ layout: single
 description: |
    Learn to detect and remediate infrastructure drift with Pulumi Deployments.
 meta_desc: In this tutorial, learn to detect and remediate infrastructure drift in AWS using Pulumi Deployments and GitHub integration.
-meta_image: meta.png
 weight: 90
 summary: |
    In this tutorial, you will learn how to detect and remediate infrastructure drift in AWS using Pulumi Deployments. You'll create an EC2 instance, introduce drift by making manual changes via the AWS CLI or console, and then use Pulumi Deployments to detect and correct the drift.
@@ -161,7 +160,7 @@ To see drift detection in action, you will now manually introduce drift by makin
 
 ### Add a tag to the EC2 instance using the AWS CLI
 
-To add a tag via the AWS CLI, you'll first need to retrieve the EC2 instance ID. Use the the following command:
+To add a tag via the AWS CLI, you'll first need to retrieve the EC2 instance ID. Use the following command:
 
 ```bash
 aws ec2 describe-instances --filters "Name=tag:Name,Values=webserver" --query "Reservations[*].Instances[*].InstanceId" --output text

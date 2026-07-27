@@ -3,7 +3,6 @@ title_tag: "Bitbucket Integration | Version Control"
 meta_desc: Connect Bitbucket Cloud workspaces to Pulumi Cloud for pull request previews, push-to-deploy, review stacks, commit statuses, and automated deployments.
 title: Bitbucket
 h1: Bitbucket
-meta_image: /images/docs/meta-images/docs-meta.png
 menu:
     integrations:
         name: Bitbucket
@@ -47,7 +46,9 @@ If your workspace does not support workspace access tokens, Pulumi Cloud prompts
 
 ### Individual user setup
 
-Separately from the org-level integration, individual users can complete an OAuth flow under **Management** > **Version control** to grant Pulumi access to their Bitbucket account. This is used for features like Neo Agent repository creation on the user's behalf and does not create webhooks.
+Separately from the org-level integration, individual users can complete an OAuth flow under **Management** > **Version control** to grant Pulumi access to their Bitbucket account. The integration card shows your status: "Individual access is authorized for this account" once you've connected, or "Individual access is recommended for this account" with an **Add Individual Account** button if you haven't.
+
+Individual access lets Pulumi create repositories on your behalf — for example, cloning project templates into a new repository or letting [Neo](/docs/ai/) create a repository for you. It does not create webhooks. The org-level integration continues to handle pull request comments and deployments regardless of whether you grant individual access.
 
 {{% notes type="info" %}}
 To remove your individual identity, select your identity on the integration card and choose **Remove Identity**.
@@ -60,7 +61,7 @@ After creating an integration, you can configure pull request behavior. Toggle t
 | Setting | Default | Description |
 |---|---|---|
 | Pull request comments | Enabled | Post deployment status and resource changes as comments on Bitbucket pull requests |
-| Neo summaries for pull request comments | Enabled | Include AI-generated summaries of infrastructure changes in pull request comments (requires [AI Agents](/docs/ai/) to be enabled for your organization) |
+| Neo Code Reviews | Enabled | Include Neo's AI-generated review of infrastructure changes in pull request comments (requires [Pulumi Neo](/docs/ai/neo/get-started/#enabling-and-disabling-neo) to be enabled for your organization) |
 | Detailed diff for pull request comments | Enabled | Show property-level before/after diffs for changed resources in pull request comments |
 
 To delete an integration, select **Delete Integration** on the integration card. This removes the webhooks Pulumi created on your Bitbucket repositories and disconnects all stacks using that integration.
@@ -81,13 +82,15 @@ Pulumi posts commit status checks to Bitbucket on every deployment, for both pus
 
 ### Push-to-deploy
 
-Push-to-deploy automatically runs `pulumi up` when a commit is pushed to a configured branch, most commonly the default branch. Enable this under **Stack** > **Settings** > **Deploy** by toggling **Deploy on push**. See the [push-to-deploy documentation](/docs/deployments/deployments/using/triggers/#push-to-deploy) for setup instructions.
+Push-to-deploy automatically runs `pulumi up` when a commit is pushed to a configured branch, most commonly the default branch. Enable this under **Stack** > **Settings** > **Deploy** by toggling **Deploy on push**. See the [push-to-deploy documentation](/docs/deployments/concepts/triggers/#push-to-deploy) for setup instructions.
 
 You can use path filters to limit deployments to commits that change files matching specific glob patterns (e.g., `infrastructure/**`).
 
+You can also deploy on git tag pushes — for example, on every `v*` release tag — using [tag triggers](/docs/deployments/concepts/settings/tag-filtering/).
+
 ### Review stacks
 
-[Review stacks](/docs/deployments/deployments/review-stacks/) are ephemeral cloud environments created automatically every time a pull request is opened, powered by Pulumi Deployments. Open a pull request, and Pulumi Deployments stands up a stack with your changes and posts a pull request comment with the outputs. Merge or close the pull request, and Pulumi Deployments destroys the stack and frees the associated resources.
+[Review stacks](/docs/deployments/concepts/review-stacks/) are ephemeral cloud environments created automatically every time a pull request is opened, powered by Pulumi Deployments. Open a pull request, and Pulumi Deployments stands up a stack with your changes and posts a pull request comment with the outputs. Merge or close the pull request, and Pulumi Deployments destroys the stack and frees the associated resources.
 
 To enable review stacks, toggle **Pull request template** under **Stack** > **Settings** > **Deploy** on the stack you want to use as a template.
 

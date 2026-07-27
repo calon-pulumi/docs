@@ -12,7 +12,6 @@ aliases:
   - /docs/pulumi-cloud/esc/
 
 meta_desc: Learn how to tame secrets sprawl and configuration complexity securely across all your cloud infrastructure and applications.
-meta_image: /images/docs/meta-images/docs-meta.png
 h1: Secrets & Configuration
 description: <p>Pulumi ESC (Environments, Secrets, and Configuration) provides centralized secrets management and orchestration across all your infrastructure and applications.</p>
 
@@ -39,8 +38,8 @@ sections:
     icon: vault-40
     link: /docs/esc/providers/secrets/vault-secrets/
 - type: cards-logo-label-link
-  heading: Languages
-  description: Manage configuration and secrets intuitively on any cloud using familiar languages.
+  heading: Languages & SDKs
+  description: <p>Use the ESC SDKs to retrieve environment values from your application workloads at runtime and to manage environments programmatically. To consume an environment from a Pulumi IaC program, use <a href="/docs/esc/guides/pulumi-iac/">config</a> instead.</p>
   cards:
   - label: Node.js
     icon: icon-32-32 node-color-32-32
@@ -51,9 +50,9 @@ sections:
   - label: Go
     icon: icon-32-32 go-color-32-32
     link: /docs/esc/languages-sdks/go/
-  - label: YAML
-    icon: icon-32-32 yaml-color-32-32
-    link: /docs/esc/environments/syntax/
+  - label: .NET
+    icon: icon-32-32 dotnet-color-32-32
+    link: /docs/esc/languages-sdks/dotnet/
 - type: button-cards
   heading: Operations
   description: Day-to-day workflows for running Pulumi ESC.
@@ -61,25 +60,25 @@ sections:
   - icon: lock-key
     heading: Manage secrets
     description: Store, retrieve, and organize secrets in ESC environments.
-    link: /docs/esc/operations/managing-secrets/
+    link: /docs/esc/concepts/environments/
   - icon: play
-    heading: Run commands with esc run
+    heading: Run commands with pulumi env run
     description: Inject environment values into any command or script.
     link: /docs/esc/guides/running-commands/
   - icon: pulumi-iac
     heading: Use ESC with Pulumi IaC
     description: Consume environments from a Pulumi program.
-    link: /docs/esc/guides/integrate-with-pulumi-iac/
+    link: /docs/esc/guides/pulumi-iac/
   - icon: package
     heading: Compose environments
     description: Import environments to share configuration across teams.
-    link: /docs/esc/environments/importing-environments/
+    link: /docs/esc/concepts/imports/
 - type: button-cards
   heading: Capabilities
   cards:
   - icon: desktop
-    heading: ESC CLI
-    link: /docs/esc/cli/
+    heading: Pulumi CLI
+    link: /docs/iac/cli/commands/pulumi_env/
     description: Command-line interface for managing environments, secrets, and configuration.
   - icon: key
     heading: Login providers
@@ -92,7 +91,7 @@ sections:
   - icon: bell
     heading: Webhooks
     description: Automate processes with environment event webhooks.
-    link: /docs/esc/environments/webhooks/
+    link: /docs/esc/concepts/webhooks/
 - type: button-cards
   heading: Resources
   cards:
@@ -103,7 +102,7 @@ sections:
   - icon: folder
     heading: Environments
     description: Reference for the ESC YAML syntax, imports, versioning, and webhooks.
-    link: /docs/esc/environments/
+    link: /docs/esc/concepts/environments/
   - icon: link
     heading: Guides
     description: Use ESC with Docker, direnv, GitHub Actions, Kubernetes, Cloudflare, and Pulumi IaC.

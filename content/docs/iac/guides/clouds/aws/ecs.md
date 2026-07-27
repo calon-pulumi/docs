@@ -4,7 +4,6 @@ title: ECS
 h1: AWS Elastic Container Service (ECS)
 meta_desc: Pulumi's AWSX library simplifies deploying containerized applications into ECS and managing all of the
             associated resources.
-meta_image: /images/docs/meta-images/docs-clouds-aws-meta-image.png
 menu:
   iac:
     parent: iac-guides-clouds-aws
@@ -124,3 +123,4 @@ For more information about using ECR, refer to Pulumi's [AWS Guide for ECR](/doc
 ## Additional ECS Resources
 
 * [Amazon Elastic Container Service](https://aws.amazon.com/ecs/)
+* [Container image build caching and deployment reproducibility](/docs/iac/operations/container-image-reproducibility/) — pin task definitions to a build's image digest instead of a mutable tag, and cache image builds across CI runs.

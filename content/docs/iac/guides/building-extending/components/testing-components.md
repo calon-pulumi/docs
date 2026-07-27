@@ -3,7 +3,6 @@ title_tag: "Testing Pulumi Components"
 meta_desc: "Learn strategies and tools for testing Pulumi Components during development and in CI/CD workflows."
 title: Testing Pulumi Components
 h1: Testing Pulumi Components
-meta_image: /images/docs/meta-images/docs-meta.png
 menu:
     iac:
         name: Testing Components
@@ -109,7 +108,7 @@ policy.resourceOfType("aws:ec2/instance:Instance", (args, reportViolation) => {
 });
 ```
 
-Use policies to enforce security, cost, or compliance constraints that complement component-level modeling. Suppose a component author had changed the input enum accidentally. This policy would catch that at runtime, preventing the costly cloud resources from being created and alerting the end user to the issue. Policies can function as always-on unit tests in that way. Read more about about this in ["Property Testing"](/docs/iac/guides/testing/property-testing/).
+Use policies to enforce security, cost, or compliance constraints that complement component-level modeling. Suppose a component author had changed the input enum accidentally. This policy would catch that at runtime, preventing the costly cloud resources from being created and alerting the end user to the issue. Policies can function as always-on unit tests in that way. Read more about this in ["Property Testing"](/docs/iac/guides/testing/property-testing/).
 
 ## Debugging Strategies
 
@@ -162,4 +161,4 @@ This provides essential details for debugging interop issues and schema mismatch
 
 - [Build a Component](/docs/iac/using-pulumi/build-a-component/)
 - [Testing Pulumi Programs](/docs/iac/guides/testing/)
-- [Pulumi Provider SDK](/docs/iac/build-with-pulumi/pulumi-provider-sdk/)
+- [Pulumi Go Provider SDK](/docs/iac/guides/building-extending/packages/pulumi-go-provider-sdk/)

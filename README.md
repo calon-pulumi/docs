@@ -41,6 +41,7 @@ See also:
 * [Build and deployment guide](./BUILD-AND-DEPLOY.md)
 * [Publishing a Pulumi blog post](./BLOGGING.md)
 * [Documentation and coding style guide](./STYLE-GUIDE.md)
+* [Event social cards (OpenGraph / meta images)](./EVENT-SOCIAL-CARDS.md)
 * [AI agent instructions](./AGENTS.md)
 
 # Setup and Development
@@ -172,7 +173,6 @@ We generate reference documentation in two surfaces — language-specific SDK do
 | Surface | Source repo | Workflow file | Output |
 |---|---|---|---|
 | Pulumi CLI commands | `pulumi/pulumi` | [`pulumi-cli-docs.yml`](.github/workflows/pulumi-cli-docs.yml) | `content/docs/iac/cli/commands/` |
-| Pulumi ESC CLI commands | `pulumi/esc` | [`esc-cli.yml`](.github/workflows/esc-cli.yml) | `content/docs/esc/cli/commands/` |
 | Pulumi SDK — TypeScript | `pulumi/pulumi` | [`pulumi-sdk-typescript-docs.yml`](.github/workflows/pulumi-sdk-typescript-docs.yml) | `static-prebuilt/docs/reference/pkg/nodejs/pulumi/` |
 | Pulumi SDK — Python | `pulumi/pulumi` | [`pulumi-sdk-python-docs.yml`](.github/workflows/pulumi-sdk-python-docs.yml) | `static-prebuilt/docs/reference/pkg/python/pulumi/` |
 | Pulumi SDK — .NET | `pulumi/pulumi-dotnet` | [`pulumi-sdk-dotnet-docs.yml`](.github/workflows/pulumi-sdk-dotnet-docs.yml) | `static-prebuilt/docs/reference/pkg/dotnet/` |
@@ -239,9 +239,6 @@ JAVA_REPO=../pulumi-java ./scripts/gen_javadoc.sh
 # Pulumi CLI markdown — uses the currently-installed `pulumi` binary, so install
 # the version you're documenting before running.
 PULUMI_EXPERIMENTAL=true pulumi gen-markdown ./content/docs/iac/cli/commands
-
-# Pulumi ESC CLI markdown
-esc gen-docs ./content/docs/esc/cli/commands
 ```
 
 The generated content lands in the output paths from the table above. Preview locally with:
@@ -254,7 +251,7 @@ make serve-static    # Serve the built site on http://localhost:8080.
 With `make serve-static` running, browse to <http://localhost:8080/docs>:
 
 * Choose **Languages & SDKs** → your language → scroll to the package you're interested in.
-* Choose **Pulumi CLI** or **Pulumi ESC CLI** → **Commands**.
+* Choose **Pulumi CLI** → **Commands**.
 
 ### Checking in generated docs
 
@@ -306,7 +303,7 @@ block_external_search_index: true
 Engage with our community to elevate your developer experience:
 
 * **Join our online [Pulumi Community on Slack](https://slack.pulumi.com/?utm_campaign=pulumi-docs-repo&utm_source=github.com&utm_medium=welcome-slack)** - Interact with thousands of Pulumi developers for collaborative problem-solving and knowledge-sharing!
-* **Join a [Local Pulumi User Groups (PUGs)](https://www.meetup.com/pro/pugs/)** - Attend tech-packed meetups and hands-on virtual or in-person workshops.
+* **Join a [Local Pulumi User Groups (PUGs)](https://luma.com/pulumi)** - Attend tech-packed meetups and hands-on virtual or in-person workshops.
 * **Follow [@PulumiCorp](https://twitter.com/PulumiCorp) on X (Twitter)** - Get real-time updates, technical insights, and sneak peeks into the latest features.
 * **Subscribe to our YouTube Channel, [PulumiTV](https://www.youtube.com/@PulumiTV)** - Learn about AI / ML essentials, launches, workshops, demos and more.
 * **Follow our [LinkedIn](https://www.linkedin.com/company/pulumi/?utm_campaign=pulumi-docs-github-repo&utm_source=github.com&utm_medium=docs-community)** - Uncover company news, achievements, and behind-the-scenes glimpses.

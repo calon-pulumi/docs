@@ -991,18 +991,6 @@ pulumi-destroy.md
 
 Updated automatically via `pulumi-cli.yml` workflow when new CLI versions are released.
 
-#### ESC CLI - Command Reference
-
-**Command:** `esc gen-docs`
-
-Generates markdown documentation for ESC CLI commands.
-
-**Output:** `content/docs/esc-cli/commands/`
-
-**Automation:**
-
-Updated automatically via `esc-cli.yml` workflow when new ESC versions are released.
-
 ---
 
 ## GitHub Actions Workflows
@@ -1181,22 +1169,6 @@ The repository uses 24 GitHub Actions workflows organized into categories. All w
 
 **Why It Matters:** Keeps CLI documentation synchronized with releases automatically.
 
-#### esc-cli.yml
-
-**Purpose:** Auto-generate ESC CLI documentation
-
-**Triggers:**
-
-- Repository dispatch from pulumi/esc repository
-- Triggered on ESC CLI release
-
-**Process:** Similar to pulumi-cli.yml but for ESC commands
-
-**Output:**
-
-- ESC CLI command documentation
-- Updated `static/esc/latest-version`
-
 #### customer-managed-deployment-agent-cli.yml
 
 **Purpose:** Update CMDA CLI version
@@ -1324,6 +1296,9 @@ The repository uses 24 GitHub Actions workflows organized into categories. All w
 - Run `make check_links`
 - Crawl production site (<www.pulumi.com>)
 - Check all links (internal and external)
+- Merge real-404 server-log hits from the reader-signals export into
+  `.broken-links.json` (`scripts/link-checker/merge-404-signal.py`; no-op
+  until the data-team export exists)
 - Report broken links
 
 **Output:** Slack notification with broken link report
@@ -1467,8 +1442,17 @@ The repository includes 10 additional utility workflows for automation and proje
 - **claude.yml**: AI-assisted code analysis and suggestions (triggered by @claude mentions in issues/PRs)
 - **claude-code-review.yml**: AI-powered code review automation for pull requests
 - **claude-social-review.yml**: AI-powered review of social media post copy generated for blog post PRs
+- **review-existing-content.yml** / **content-review-article.yml**: Daily existing-content review — deterministic selection fans out one per-article worker per page
+- **blog-review-index.yml**: Daily blog known-issues indexing — deterministic selection (`scripts/blog-review/select-posts.py`), one unprivileged model review per post (matrix), one deterministic record job. FLAG-ONLY: findings land in S3 (`blog-review/` prefix in the content-review ledger bucket: `ledger/`, `index/`, `runs/`, `index/_summary.json`); no content edits, no PRs. On/off/cadence via the `BLOG_REVIEW_COUNT` repo variable (unset = 5/run, `'0'` = off). The index is evidence for a future noindex decision process (`block_external_search_index: true` on rotted, low-value posts).
 
 The first two workflows include a permission check step that verifies the triggering user has write access to the repository before running Claude. Users without write access will see the workflow skip Claude execution. The social review workflow runs only on internal PRs from non-bot authors.
+
+**Content-review worker privilege model (`content-review-article.yml`):** the per-article worker is split into two jobs with opposite privilege profiles, because the review model consumes artifacts derived from fetched external URLs (a prompt-injection surface):
+
+- The `review` job runs the model **unprivileged**: read-scoped default token, `persist-credentials: false` on checkout, no `environment: production`, no ESC or AWS credentials, and a preflight step that fails the job if credentials are detected in the model's environment. The model edits the working tree only and hands its changes to the next job as a patch in a run artifact.
+- The `publish` job is **deterministic only** (no model) and holds the production credentials (pulumi-bot token, AWS role for the S3 ledger). Before pushing anything it runs `scripts/content-review/publish-gate.py`, which enforces the verdict schema, the diff scope (a fix may touch only the reviewed article plus shared render-time sources; a retirement only `content/`, `scripts/redirects/`, and the docs menu data), and the `no_retire` veto from the selection queue. The branch name is derived from the queue slug, never chosen by the model.
+
+This mirrors the pre-merge review's posture (`claude-code-review.yml` runs its model with no push credentials); the accepted residual risk in the review job is the Anthropic API key the model inherently runs on.
 
 **Project Management:**
 
@@ -1495,7 +1479,7 @@ These workflows support repository maintenance, automation, and developer experi
 | pull-request | PRs to master | Testing | 10-15 min | PR validation & preview |
 | pr-closed | PR closed | Testing | <1 min | Cleanup preview resources |
 | pulumi-cli | Repository dispatch | N/A | 5-10 min | Auto-generate CLI docs |
-| esc-cli | Repository dispatch | N/A | 3-5 min | Auto-generate ESC docs |
+| esc-cli | Repository dispatch | N/A | <1 min | Update `static/esc/latest-version` pointer (read by pulumi/esc-action v1/v2) |
 | scheduled-test | Daily 8 AM UTC, PRs | Testing | 2-2.5 hrs (scheduled), 3-5 min (PR) | Test example programs |
 | scheduled-upgrade-programs | ~~Daily 6 AM UTC~~ (disabled) | N/A | N/A (fails) | Update dependencies |
 | bucket-cleanup | Daily 3 PM UTC | Production | 2-5 min | Delete old buckets |
@@ -2456,7 +2440,10 @@ ONLY_TEST="aws-s3-bucket-typescript" ./scripts/programs/test.sh
 make check_links
 ```
 
-**CI Execution:** Daily at 3 PM UTC via `check-links.yml`
+**CI Execution:** Daily at 3 PM UTC via `check-links.yml`. In CI the results
+are enriched with real-404 server-log hits from the reader-signals export
+(`scripts/link-checker/merge-404-signal.py`) before triage, so the highest
+reader-impact breakage is fixed first.
 
 **Output:** Report posted to Slack
 
@@ -3409,6 +3396,21 @@ Dependabot automatically updates GitHub Actions versions. Review and merge Depen
 - uses: actions/setup-node@v6
 ```
 
+### Clearing Google's robots.txt cache
+
+Google generally caches `robots.txt` for up to 24 hours, after which its crawlers pick up any changes automatically (it may occasionally cache longer when refreshing isn't possible). If you need the cache refreshed sooner (for example, after a significant crawling rule change), you can request an immediate refresh through Google Search Console.
+
+> **Note:** Access to the [Pulumi Google Search Console](https://search.google.com/search-console?resource_id=sc-domain%3Apulumi.com) property is required. If you don't have access, contact a member of the docs team who does.
+
+**Steps:**
+
+1. Open [Google Search Console](https://search.google.com/search-console?resource_id=sc-domain%3Apulumi.com) and select the **pulumi.com** property.
+1. In the left navigation, go to **Indexing** > **robots.txt**.
+1. In the robots.txt report, click **Request a recrawl**.
+1. Confirm the request. Google will refresh its cached copy within a few hours instead of waiting for the cache to expire.
+
+For reference, see [Google's documentation on submitting an updated robots.txt](https://developers.google.com/crawling/docs/robots-txt/submit-updated-robots-txt).
+
 ## Dependency management
 
 This section provides comprehensive guidance for triaging and managing Dependabot pull requests in this repository.
@@ -3439,7 +3441,7 @@ This section provides comprehensive guidance for triaging and managing Dependabo
 
 **Security Updates:** Arrive immediately regardless of schedule (Dependabot auto-override)
 
-### Automated risk labeling
+### Automated labeling
 
 All Dependabot PRs automatically receive:
 
@@ -3449,160 +3451,30 @@ All Dependabot PRs automatically receive:
 
 **Auto-applied labels (via label-dependabot.yml workflow):**
 
-**Risk Tier Labels:**
-
-- `deps-risk-high` - Runtime/browser/parser dependencies
-- `deps-risk-medium` - Build tools/infrastructure dependencies
-- `deps-risk-low` - Dev tools only
-
-**Action Labels:**
-
-- `deps-merge-after-test` - Test locally, then merge (HIGH risk or security patches)
-- `deps-security-patch` - Security update, merge immediately after testing
-- `deps-quarterly-review` - Close for batch review in quarterly cycle (MEDIUM/LOW risk)
-
-**Special Flags:**
-
+- `deps-security-patch` - Security update; evaluate and merge promptly
 - `deps-lambda-edge-risk` - Webpack/bundler/AWS SDK updates (see Infrastructure Change Review)
 - `deps-bulk-update` - 10+ dependencies in single PR
 
-### Dependency risk tiers
-
-#### HIGH RISK - Runtime/browser/parser dependencies
-
-**Characteristics:**
-
-- Execute in browser or server runtime
-- Parse user content or external data
-- Directly affect site functionality and user experience
-
-**Packages:**
-
-- **Search:** `@algolia/*`, `algoliasearch`, `search-insights`
-- **Content Parsing:** `marked`, `markdown-it`, `js-yaml`, `cheerio`, `gray-matter`
-- **Browser APIs:** `clipboard-polyfill`
-- **Web Components:** `@stencil/*`, `swiper`
-- **Utilities:** `uuid`
-
-**Triage Action:** `deps-merge-after-test`
-
-**Testing Checklist:**
-
-1. Run `make serve-all` and verify site loads
-1. Test search functionality (Algolia integration)
-1. Check browser console for errors
-1. Verify markdown rendering on multiple pages
-1. Test interactive components (code copy, tabs, etc.)
-
-#### MEDIUM RISK - Build tools/infrastructure dependencies
-
-**Characteristics:**
-
-- Affect build process and bundling
-- Infrastructure as code dependencies
-- Lambda@Edge function dependencies (special attention required)
-
-**Packages:**
-
-- **Webpack Ecosystem:** `webpack*`, `*-loader`, `*-webpack-plugin*`
-- **CSS Processing:** `postcss*`, `sass*`, `cssnano`, `autoprefixer`, `tailwindcss`
-- **TypeScript:** `typescript`
-- **Pulumi:** `@pulumi/*`
-- **AWS SDK:** `@aws-sdk/*` (Lambda@Edge risk)
-
-**Triage Action:** `deps-quarterly-review` (unless security patch)
-
-**Special Considerations:**
-
-- **Lambda@Edge Risk:** Webpack, bundlers, and AWS SDK updates affect Lambda@Edge function size. See [Infrastructure Change Review](#infrastructure-change-review) section for deployment risks and 1MB compressed size limit.
-- **Build Performance:** CSS/PostCSS updates can affect build times
-- **TypeScript:** Breaking changes may require code updates
-
-**Quarterly Review Process:**
-
-1. Batch all MEDIUM-risk PRs from the quarter
-1. Test webpack/bundler updates first (Lambda@Edge size check)
-1. Test CSS processing updates second (build time check)
-1. Test TypeScript updates last (compilation check)
-1. Merge in order of successful testing
-
-#### LOW RISK - Dev tools only
-
-**Characteristics:**
-
-- Testing and development tools
-- Code quality and formatting tools
-- Documentation generation tools
-- Local development servers
-
-**Packages:**
-
-- **Testing:** `cypress`, `jest*`, `puppeteer`
-- **Build Optimization:** `workbox-build`
-- **Code Quality:** `prettier`, `eslint*`, `markdownlint`, `husky`, `lint-staged`
-- **Dev Servers:** `http-server`, `concurrently`
-- **Documentation:** `typedoc`
-
-**Triage Action:** `deps-quarterly-review`
-
-**Quarterly Review Process:**
-
-1. Batch all LOW-risk PRs from the quarter
-1. Quick smoke test: `make test && make lint`
-1. Merge all if tests pass
-1. If failures, debug individually
+The workflow does not classify PRs into risk tiers. Dependency updates are
+grouped per ecosystem and arrive at a low, predictable volume, so the policy is
+simply to evaluate each PR and merge it once CI is green (see below). The two
+flags above surface the only signals that change handling: security patches get
+priority, and `deps-lambda-edge-risk` PRs need the bundle-size check.
 
 ### Monthly triage workflow
 
-On the first Monday of each month, Dependabot generates exactly 5 grouped PRs (one per ecosystem). Follow this workflow:
+On the first Monday of each month, Dependabot generates roughly 5 grouped PRs (one per ecosystem), plus security patches as they arise. The policy is to **evaluate each PR and merge it as it comes in** — there is no risk tiering and no quarterly deferral. Grouping already keeps volume low, so batching buys nothing.
 
-**Step 1: Check Labels (30 seconds per PR)**
+For each PR:
 
-- Look at auto-applied risk tier and action labels
-- No need to read PR bodies initially—labels tell you everything
+1. **Build and spot-check.** Run `make build` (or `make serve-all` when the PR touches browser-facing packages such as search, markdown rendering, or web components) and confirm the site builds and loads. Spot-check search, console errors, and markdown rendering.
+1. **Let CI gate it.** The PR's build/lint/Cypress checks (`pull-request.yml`) are the merge gate. Merge once they're green.
+1. **Prioritize security patches.** PRs labeled `deps-security-patch` arrive off-schedule — evaluate and merge them promptly rather than waiting for the monthly batch.
+1. **Give Lambda@Edge updates the bundle check.** For PRs labeled `deps-lambda-edge-risk` (webpack/bundler/AWS SDK), cross-reference the [Infrastructure Change Review](#infrastructure-change-review) section, check the Lambda@Edge function size against the 1MB compressed limit, and verify the CloudFront deployment succeeds in the testing environment before merging.
 
-**Step 2: Security Patches (Immediate)**
+Automated Claude review does not run on Dependabot PRs (the review pipeline is built for prose, not dependency bumps). To get a Claude pass on a specific PR, run `/pr-review <number>`.
 
-- PRs with `deps-security-patch` label: Test and merge immediately
-- Run testing checklist for applicable risk tier
-- Merge within 24 hours
-
-**Step 3: HIGH Risk Runtime Dependencies (Same Day)**
-
-- PRs with `deps-risk-high` + `deps-merge-after-test` labels
-- Run HIGH risk testing checklist (see above)
-- Merge if tests pass, or debug and fix issues
-
-**Step 4: MEDIUM/LOW Risk Dependencies (Defer)**
-
-- PRs with `deps-quarterly-review` label
-- Close with comment: "Deferring to quarterly review cycle. Will batch with other MEDIUM/LOW-risk updates."
-- Do not merge monthly—wait for quarterly batch
-
-**Step 5: Lambda@Edge Risk Flag (Extra Attention)**
-
-- PRs with `deps-lambda-edge-risk` label
-- Cross-reference [Infrastructure Change Review](#infrastructure-change-review) section
-- Check Lambda@Edge function size after webpack/bundler updates
-- Verify CloudFront deployment succeeds in testing environment
-
-**Expected Monthly Time:** 5-10 minutes for triage + 20-30 minutes for HIGH-risk testing
-
-### Quarterly review cycle
-
-**Schedule:** January, April, July, October (first week)
-
-**Process:**
-
-1. Review all closed PRs from past 3 months with `deps-quarterly-review` label
-1. Check if newer versions are available (Dependabot may have newer PRs open)
-1. Create consolidated testing branch with all MEDIUM/LOW updates
-1. Run full test suite: `make test && make lint && make build`
-1. Test Lambda@Edge function size for webpack/bundler updates
-1. Merge if all tests pass
-1. If failures, debug individually and merge successful updates only
-
-**Expected Quarterly Time:** 1-2 hours for batch testing and merging
+**Expected Monthly Time:** 5-10 minutes for triage + extra time only for Lambda@Edge or bulk PRs that warrant deeper testing.
 
 ### Security patch handling
 
@@ -3610,21 +3482,21 @@ On the first Monday of each month, Dependabot generates exactly 5 grouped PRs (o
 
 **Arrival:** Immediately when vulnerability discovered (ignores monthly schedule)
 
-**Labels:** Auto-labeled with `deps-security-patch` + applicable risk tier
+**Labels:** Auto-labeled with `deps-security-patch`
 
 **Workflow:**
 
 1. Dependabot opens PR immediately (any time of month)
-1. Auto-labeling workflow adds `deps-security-patch` + risk tier
-1. Test using checklist for applicable risk tier
-1. Merge within 24 hours regardless of risk tier
+1. Auto-labeling workflow adds `deps-security-patch`
+1. Build and spot-check (`make build`, or `make serve-all` for browser-facing packages)
+1. Merge within 24 hours once CI is green
 1. Deploy to production immediately
 
-**Example:** CVE in `marked` (HIGH risk parser)
+**Example:** CVE in `marked`
 
 - PR arrives immediately
-- Labels: `deps-security-patch`, `deps-risk-high`, `deps-merge-after-test`
-- Run HIGH risk testing checklist
+- Labels: `deps-security-patch` (and `deps-lambda-edge-risk` if a bundler/AWS SDK update)
+- Build and spot-check search/markdown rendering
 - Merge and deploy within 24 hours
 
 ### Bulk updates (10+ dependencies)

@@ -1,20 +1,22 @@
 ---
 title: "AWS Infrastructure as Code | Pulumi"
-meta_desc: "Manage AWS with Python, TypeScript, Go, or C#. Full API coverage, same-day updates, built-in best practices with Crosswalk. Free tier, no resource caps."
+meta_desc: "Manage AWS with Python, TypeScript, Go, or C#. Full API coverage, same-day updates, built-in best practices with AWSx. Free tier, no resource caps."
 layout: gads-template
 block_external_search_index: true
 
 heading: "AWS Infrastructure as Code"
 subheading: |
     Manage any AWS service with real programming languages. Pulumi's AWS provider offers
-    full API coverage with same-day updates, plus higher-level Crosswalk components
+    full API coverage with same-day updates, plus higher-level AWSx components
     for production-ready architectures out of the box.
 
 hide_platform_details: true
 
 customer_quote:
     text: "What used to take a week and a half now, with Pulumi, took under a day."
-    author: "Raman Hariharan, Director of Cloud Platform Engineering, Snowflake"
+    author: "Raman Hariharan"
+    title: "Director of Cloud Platform Engineering"
+    company: "Snowflake"
     logo: snowflake
     link: /case-studies/snowflake
 
@@ -28,17 +30,16 @@ key_features_above:
         - title: "Author in any language, deploy to AWS"
           sub_title: "Pulumi AWS Provider"
           description:
-            Manage any AWS resource using programming languages you already know. Pulumi's AWS provider covers every service and updates the same day AWS releases new features. Use Crosswalk for AWS to adopt well-architected best practices instantly.
-          image: "/images/product/pulumi-iac-code.png"
+            Manage any AWS resource using programming languages you already know. Pulumi's AWS provider covers every service and updates the same day AWS releases new features. Use Pulumi's AWSx component library to adopt well-architected best practices instantly.
           features:
               - title: Every AWS service, day one
                 description: |
                     Full API coverage for EC2, EKS, Lambda, S3, RDS, DynamoDB, and every other AWS service. Same-day updates when new services and features launch.
                 icon: global
                 color: yellow
-              - title: Crosswalk for AWS
+              - title: Component libraries
                 description: |
-                    Deploy production-ready VPCs, ECS Fargate services, and EKS clusters in just a few lines of code using Pulumi's Crosswalk library.
+                    Deploy production-ready VPCs, ECS Fargate services, and EKS clusters in just a few lines of code using Pulumi's component libraries, like AWSx.
                 icon: code
                 color: yellow
               - title: AI-powered infrastructure
@@ -51,9 +52,9 @@ key_features:
     title: Key features
     items:
         - title: "Production-ready AWS in minutes"
-          sub_title: "Pulumi Crosswalk for AWS"
+          sub_title: "Pulumi component libraries"
           description: |
-            Stop writing hundreds of lines of boilerplate for VPCs, subnets, and security groups. Crosswalk for AWS gives you production-ready architectures with built-in best practices for ECS, EKS, API Gateway, and more — in just a few lines of code.
+            Stop writing hundreds of lines of boilerplate for VPCs, subnets, and security groups. Pulumi's component libraries, like AWSx, give you production-ready architectures with built-in best practices for ECS, EKS, API Gateway, and more — in just a few lines of code.
           ide:
             - title: index.ts
               language: typescript
@@ -174,15 +175,18 @@ key_features:
                 outputs:
                   vpcId: ${my-vpc.vpcId}
           features:
-              - title: Native AWS provider
+              - title: Pulumi AWS provider
+                icon: cloud
                 description: |
                     Full API coverage for every AWS service with same-day updates when new features launch. No waiting for third-party support.
-              - title: Crosswalk for AWS
+              - title: Component libraries
+                icon: abstract-shapes
                 description: |
-                    Adopt well-architected best practices for VPC, ECS, EKS, API Gateway, and more with pre-built high-level components.
+                    Adopt well-architected best practices for VPC, ECS, EKS, API Gateway, and more with pre-built high-level components like AWSx.
               - title: Migrate from CloudFormation
+                icon: exchange
                 description: |
-                    Use cf2pulumi to convert existing CloudFormation templates to Pulumi in your language of choice. Import existing stacks with zero downtime.
+                    Import existing CloudFormation stacks into Pulumi in your language of choice with zero downtime.
 
         - title: "Deliver infrastructure through software delivery pipelines"
           sub_title: "CI/CD Integrations"
@@ -191,12 +195,15 @@ key_features:
           image: "/images/product/pulumi-cicd.png"
           features:
               - title: Version and review
+                icon: git-merged
                 description: |
                     Manage infrastructure code in Git and approve changes through pull requests.
               - title: Shift left
+                icon: eye
                 description: |
                     Get rapid feedback on your code with fast unit tests, and run integration tests against ephemeral infrastructure.
               - title: Continuous delivery
+                icon: cycle
                 description: |
                     Integrate your CI/CD provider with Pulumi or use GitOps to manage Kubernetes clusters.
 
@@ -223,30 +230,39 @@ key_features_below:
           image: "/images/product/pulumi-cloud-iac-stylized-01.png"
           features:
               - title: Pulumi IaC
+                icon: code
                 description: |
                     Utilize open-source IaC in TypeScript, Python, Go, C#, Java and YAML. Build and distribute reusable components for 170+ cloud & SaaS providers.
               - title: Pulumi ESC
+                icon: lock
                 description: |
                     Centralized secrets management & orchestration. Tame secrets sprawl and configuration complexity securely across all your cloud infrastructure and applications.
               - title: Automate deployment workflows
+                icon: cycle
                 description: |
                     Orchestrate secure deployment workflows through GitHub or an API.
               - title: Search and analytics
+                icon: eye
                 description: |
                     View resources from any cloud in one place. Search for resources across clouds with simple queries and filters.
               - title: Pulumi Automation API
+                icon: gear
                 description: |
                     Build custom deployment and CI/CD workflows that integrate with Pulumi Developer Portal, custom portals, or CLIs.
               - title: Developer portals
+                icon: buildings
                 description: |
                     Create internal developer portals to distribute infrastructure templates using Pulumi or the Backstage-plugin.
               - title: Identity and access control
+                icon: security
                 description: |
                     Manage teams with SCIM, SAML SSO, GitHub, GitLab, or Atlassian. Set permissions and access tokens.
               - title: Policy enforcement
+                icon: gavel
                 description: |
                     Build policy packs from 150 policies or write your own. Leverage compliance-ready policies for any cloud to increase compliance posture and remediation policies to correct violations.
               - title: Audit logs
+                icon: clipboard
                 description: |
                     Track and store user actions and change history with option to export logs.
 
@@ -261,7 +277,7 @@ case_studies:
 
         - name: Atlassian
           link: /case-studies/atlassian/
-          logo: atlassian
+          logo: atlassian-wordmark
           description: |
             Developers reduced their time spent on maintenance by 50%.
 

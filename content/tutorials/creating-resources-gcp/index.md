@@ -9,9 +9,6 @@ description: Learn how to define and provision resources on Google Cloud using P
 # A similar description used for search results and social-media previews.
 meta_desc: Learn how to define and provision resources on Google Cloud using Pulumi.
 
-# An image for the tutorial. It appears on tutorial page and in social-media previews.
-meta_image: create-resources-gcp-meta.png
-
 # An optional video for the tutorial. When present, it appears at the top of the page, replacing
 # the meta image. YouTube and HTML5 video sources are supported.
 # video:
@@ -281,7 +278,7 @@ In this section, you will use Pulumi documentation to configure the firewall on 
 - Configure the firewall to allow traffic on port 80
 - Preview and deploy your updated project code
 
-Once you have completed these steps, navigate to your instance IP address again. You should now be greeted with a "Hello world!" home page message that indicates your web server is running and publically accessible.
+Once you have completed these steps, navigate to your instance IP address again. You should now be greeted with a "Hello world!" home page message that indicates your web server is running and publicly accessible.
 
 ### View complete solution
 

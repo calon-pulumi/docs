@@ -4,7 +4,6 @@ title: VPC
 h1: AWS Virtual Private Cloud (VPC)
 meta_desc: The AWSx VPC component provides simple, out of the box VPC functionality that follows widely accepted best
            practices.
-meta_image: /images/docs/meta-images/docs-clouds-aws-meta-image.png
 menu:
   iac:
     parent: iac-guides-clouds-aws
@@ -273,7 +272,7 @@ Fewer NAT gateways can be requested (e.g., to save on costs) using the `natGatew
 {{< example-program path="awsx-vpc-nat-gateways" >}}
 
 In the case where there is one NAT gateway per availability zone, then routing is very simple. Each private subnet
-will have have connections routed through gateway in that availability zone.
+will have connections routed through gateway in that availability zone.
 
 In the case where there are fewer NAT gateways than availability zones, however, routing works differently. If there
 are _N_ NAT gateways requested, then the first _N_ availability zones will get a NAT gateway. Routing to private subnets

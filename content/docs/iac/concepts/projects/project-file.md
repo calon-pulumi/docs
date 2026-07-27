@@ -3,7 +3,6 @@ title_tag: Project File Reference
 meta_desc: Documentation of the settings that are valid for the Pulumi project file.
 title: Project file reference
 h1: Pulumi project file reference
-meta_image: /images/docs/meta-images/docs-meta.png
 menu:
     iac:
         name: Project file reference
@@ -19,10 +18,10 @@ aliases:
 - /docs/concepts/projects/project-file/
 ---
 
-Every Pulumi program has a project file, `Pulumi.yaml`, which specifies metadata about your project, such as the project name and language runtime. The project file must begin with a capital `P` and have an extension of either `.yml` or `.yaml`. For more information about Pulumi projects, see the following [Pulumi projects overview](/docs/intro/concepts/project/).
+Every Pulumi program has a project file, `Pulumi.yaml`, which specifies metadata about your project, such as the project name and language runtime. The project file must begin with a capital `P` and have an extension of either `.yml` or `.yaml`. For more information about Pulumi projects, see the following [Pulumi projects overview](/docs/iac/concepts/projects/).
 
 {{< notes >}}
-For Pulumi programs specifically written in Pulumi YAML, the project file not only serves as a configuration and metadata repository but also contains the program's infrastructure definition itself. For instance, `resources`, `variables`, and `outputs` are [top-level properties that define your infrastructure](/docs/iac/languages-sdks/yaml/yaml-language-reference/). To learn more, see [Pulumi YAML](/docs/intro/languages/yaml/).
+For Pulumi programs specifically written in Pulumi YAML, the project file not only serves as a configuration and metadata repository but also contains the program's infrastructure definition itself. For instance, `resources`, `variables`, and `outputs` are [top-level properties that define your infrastructure](/docs/iac/languages-sdks/yaml/yaml-language-reference/). To learn more, see [Pulumi YAML](/docs/iac/languages-sdks/yaml/).
 {{< /notes >}}
 
 ## Attributes
@@ -32,11 +31,14 @@ For Pulumi programs specifically written in Pulumi YAML, the project file not on
 | `name` | required | Name of the project containing alphanumeric characters, hyphens, underscores, and periods. | None |
 | `runtime` | required | Installed language runtime of the project: `nodejs`, `python`, `go`, `dotnet`, `java`, `yaml`, or `bun`. | [runtime options](#runtime-options)
 | `description` | optional | A brief description of the project. | None |
+| `author` | optional | The author of the project. | None |
+| `website` | optional | A URL for the project's website or repository. | None |
+| `license` | optional | The license governing this project's usage (e.g. `Apache-2.0`, `MIT`). | None |
 | `config` | optional | Project level config (Added in v3.44). | [config options](#config-options) |
 | `packages` | optional | Additional packages to be used in the program (Added in v3.157.0.) | [packages](#packages-options) |
 | `main` | optional | Path to the Pulumi program, relative to the location of `Pulumi.yaml`. The default is the current working directory. | None |
 | `stackConfigDir` | optional | Config directory location relative to the location of `Pulumi.yaml`. | None |
-| `backend` | optional | [Backend](/docs/concepts/state/) of the project. | [backend options](#backend-options) |
+| `backend` | optional | [Backend](/docs/iac/concepts/state-and-backends/) of the project. | [backend options](#backend-options) |
 | `options` | optional | Additional project options. | [options options](#options-options) |
 | `template` | optional | Config to be used when creating new stacks in the project. | [template options](#template-options) |
 | `plugins` | optional | Override for the plugin selection. Intended for use in developing pulumi plugins.  | [plugins options](#plugins-options) |
@@ -167,6 +169,7 @@ Schemas are only valid for project property keys. For setting the value of a pro
 | `displayName` | optional | A user-friendly name for the template. This should follow `Title Case` format and be succinct. This field is only supported by Pulumi CLI >= 3.95. |
 | `description` | optional | Description of the template. |
 | `quickstart` | optional | Text to display after the template is instantiated — for example, after `pulumi new` generates a new project. Use this field to surface follow-up instructions specific to the template, such as required environment variables, dependency installation steps, or links to getting-started guides. |
+| `important` | optional | Boolean indicating whether the template is important and should be listed by default. |
 | `config` | required | Config to request when using this template with `pulumi new`. |
 | `metadata` | optional | A map of user-defined tags to attach to the template. The Pulumi Cloud [New Project Wizard](/docs/idp/concepts/new-project-wizard/) recognizes a `cloud` key for filtering templates by target cloud — see [Organization templates](/docs/idp/concepts/organization-templates/#new-project-wizard-cloud-filter) for accepted values. This field is only supported by Pulumi CLI >= 3.95. |
 
@@ -230,6 +233,9 @@ runtime:
   options:
     compiler: cue export
 description: An example project with all attributes
+author: Your Name
+website: https://example.com
+license: Apache-2.0
 main: example-project/
 stackConfigDir: config/
 backend:
@@ -240,6 +246,7 @@ template:
   displayName: Example Template
   description: An example template
   quickstart: Run npm install to install dependencies, then pulumi up to deploy.
+  important: false
   config:
     aws:region:
       description: The AWS region to deploy into

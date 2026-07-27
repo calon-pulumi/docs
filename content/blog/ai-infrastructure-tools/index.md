@@ -3,7 +3,6 @@ title: "Best AI Infrastructure Tools in 2026"
 date: 2026-05-25
 draft: false
 meta_desc: "GPU clouds, MLOps platforms, and AI-powered infrastructure tools, compared. What each one is good at, where it falls short, and how to pick in 2026."
-meta_image: meta.png
 feature_image: feature.png
 authors:
     - alex-leventer
@@ -12,14 +11,16 @@ tags:
     - infrastructure-as-code
     - platform-engineering
     - devops
-    - pulumi-news
+    - announcements
+category: general
+faq_schema: true
 ---
 
-The phrase "AI infrastructure" now means two different things. One is the GPUs, schedulers, and MLOps platforms that exist to run AI workloads. The other is AI that runs infrastructure: agents and assistants that generate, deploy, and govern cloud resources on your behalf. They're different markets with different vendors, and most teams need to think about both.
+"AI infrastructure tools" covers two distinct markets: infrastructure *for* AI (GPU clouds like CoreWeave, MLOps platforms like Weights & Biases) and AI *for* infrastructure (agentic platforms like Pulumi Neo that generate, deploy, and govern cloud resources for you). Most teams need tools from both categories, and picking the wrong one wastes budget and adoption goodwill.
 
 <!--more-->
 
-The pressure to think about both is real. [McKinsey research](https://www.mckinsey.com/capabilities/mckinsey-digital/our-insights/the-economic-potential-of-generative-ai-the-next-productivity-frontier) puts the productivity lift from generative AI in software development at 20–45%, which is great for application teams and a problem for platform teams trying to keep up with the resulting feature flow. Infrastructure investment is climbing on both fronts: more spend on the compute that trains and serves models, more spend on AI tools that manage everything else.
+The pressure to get this right is real. [McKinsey research](https://www.mckinsey.com/capabilities/mckinsey-digital/our-insights/the-economic-potential-of-generative-ai-the-next-productivity-frontier) puts the productivity lift from generative AI in software development at 20–45%, which is great for application teams and a problem for platform teams trying to keep up with the resulting feature flow. Infrastructure investment is climbing on both fronts: more spend on the compute that trains and serves models, more spend on AI tools that manage everything else.
 
 This guide covers both categories: the compute and MLOps stack in Part 1, and AI-powered infrastructure management in Part 2, where the more interesting product shift is happening.
 
@@ -59,7 +60,7 @@ The term covers two distinct categories that share almost no vendors.
 
 **Infrastructure for AI** is the compute, storage, and orchestration that AI workloads run on. Training a large model is not a normal cloud workload: it wants thousands of GPUs talking to each other over fat, low-latency networks for weeks at a time. Inference is different again: lower latency, smarter batching, different hardware. General-purpose cloud was not designed for either case, which is why specialized GPU clouds and MLOps platforms exist.
 
-**AI-powered infrastructure management** is the inverse: AI tools that manage cloud infrastructure. They generate IaC, run deployments, detect drift, and remediate policy violations. The pitch is that modern infrastructure (multi-cloud, containers, microservices, regulated workloads) has gotten too complex for humans to manage by hand and too varied for scripted automation to keep up with.
+**AI-powered infrastructure management** is the inverse: AI tools that manage cloud infrastructure. They generate [infrastructure as code](/what-is/what-is-infrastructure-as-code/), run deployments, detect drift, and remediate policy violations. The pitch is that modern infrastructure (multi-cloud, containers, microservices, regulated workloads) has gotten too complex for humans to manage by hand and too varied for scripted automation to keep up with.
 
 Most organizations end up needing both: somewhere to run their ML workloads, and something to keep the rest of the cloud sane.
 
@@ -124,7 +125,7 @@ The shared tradeoff: hyperscaler GPU compute typically runs 2–3x the per-hour 
 
 ## Part 2: AI-powered infrastructure management tools
 
-This is where the more interesting product shift is happening. Instead of running AI on infrastructure, these tools point AI at your infrastructure and let it do work.
+This is where the more interesting product shift is happening. Instead of running AI on infrastructure, these tools point AI at your infrastructure and let it do work. They're a newer, AI-native layer on top of the broader [infrastructure as code tooling landscape](/blog/infrastructure-as-code-tools/).
 
 ### From code generation to agentic execution
 
@@ -249,6 +250,10 @@ Strengths: visual development for serverless; direct AWS integration; AI suggest
 | Crossplane / Upbound | Kubernetes-native | K8s patterns for infra | Requires K8s expertise | Open source + commercial | Kubernetes-native teams |
 | Code assistants | Code assistant | Broad language support, IDE | No infrastructure context | Subscription | General code assistance |
 | AWS Composer | Visual builder | Visual serverless development | AWS- and CFN-only | Included with AWS | AWS serverless apps |
+
+{{< blog/cta-card title="See agentic infrastructure in action" label="Explore Pulumi Neo" href="/product/neo/" >}}
+Pulumi Neo generates, deploys, and governs cloud infrastructure across the resources you already have, with the policy guardrails you define.
+{{< /blog/cta-card >}}
 
 ## How to choose
 

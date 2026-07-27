@@ -3,7 +3,6 @@ title: What Is DevOps Automation?
 meta_desc: |
     DevOps automation can be key to consistent and scalable workflows. Learn how engineering teams can ship faster and more reliably with DevOps automation.
 
-meta_image: /images/what-is/what-is-devops-automation-meta.png
 type: what-is
 page_title: What Is DevOps Automation?
 
@@ -41,7 +40,7 @@ A primary emphasis in DevOps is the automated orchestration of infrastructure an
 
 DevOps automation refers to integrating technologies that minimize manual intervention, enhancing feedback loops between operations and development. This facilitates quicker iterative updates to production applications. By encompassing the complete development lifecycle, DevOps automation enhances speed, precision, consistency, and reliability, boosting the frequency of software deliveries.
 
-In this article, we'll unravel how automation, not only accelerates software delivery but also fosters a culture of collaboration, innovation, and continuous improvement. Whether you're a novice exploring DevOps for the first time or an expert seeking to refine your automation strategies, this guide provides a holistic overview of the DevOps automation landscape.
+In this article, we'll unravel how automation not only accelerates software delivery but also fosters a culture of collaboration, innovation, and continuous improvement. Whether you're a novice exploring DevOps for the first time or an expert seeking to refine your automation strategies, this guide provides a holistic overview of the DevOps automation landscape.
 
 ## What is DevOps Automation?
 
@@ -66,7 +65,7 @@ In today's fast-paced digital world, agility and responsiveness have become crit
 * **Continuous Integration (CI):** This is the practice of frequently merging code changes into a central repository. Automated tests are run to ensure new changes don't introduce errors. It's essential for catching issues early and streamlining code integration.
 * **Continuous Delivery/Deployment (CD):** Once code passes the CI phase, it can be automatically deployed to various environments (staging, production). Continuous Delivery ensures the code is always in a deployable state, while Continuous Deployment automates the deployment to production.
 * **Automated Testing:** Beyond just unit tests in CI, automated testing encompasses integration tests, performance tests, and end-to-end tests, ensuring the software performs well under various conditions and real-world scenarios.
-* **Infrastructure as Code (IaC):** This is the process of managing and provisioning infrastructure using code and automation tools. IaC allows for consistent environment setups, reducing discrepancies between development, testing, and production environments.
+* **[Infrastructure as Code (IaC)](/what-is/what-is-infrastructure-as-code/):** This is the process of managing and provisioning infrastructure using code and automation tools. IaC allows for consistent environment setups, reducing discrepancies between development, testing, and production environments.
 * **Application Performance Monitoring (APM):** Automated monitoring tools continuously watch applications in real-time. They can detect performance anomalies, failures, or bottlenecks, providing insights and alerts to teams for swift action.
 * **Automated Remediation:** When a monitoring tool detects an issue, automated remediation systems can kick in to resolve the problem automatically, whether it's restarting a failed service or scaling resources based on demand.
 * **Configuration Management:** Tools like Ansible, Puppet, and Chef allow for the automated setup, maintenance, and updating of system configurations across multiple servers and environments. This ensures systems are consistently configured as per predefined standards and policies.
@@ -77,7 +76,7 @@ By automating these processes, DevOps teams can ensure consistency, reliability,
 
 Effective DevOps automation transcends merely stringing together a series of tools and scripts. At its core, it represents a seamless fusion of culture, process, and technology. Culturally, teams are aligned in their goals, fostering an environment of transparency, continuous learning, and shared responsibility.
 
-On the process front, automation should be all-encompassing, touching every aspect of the software delivery lifecycle—from code integration to deployment, monitoring, and feedback loops. The tools chosen must not only facilitate these processes but also integrate harmoniously with one another, creating a cohesive ecosystem that provides end-to-end visibility and traceability. Furthermore, effective DevOps automation is iterative and adaptable, with teams continually assessing and refining their automation strategies in response to changing needs, technologies, and feedback. This proactive approach ensures that the automation remains resilient, scalable, and attuned to the organization's overarching objectives.
+On the process front, automation should be all-encompassing, touching every aspect of the software delivery lifecycle, from code integration to deployment, monitoring, and feedback loops. The tools chosen must not only support these processes but also integrate harmoniously with one another, creating a cohesive ecosystem that provides end-to-end visibility and traceability. Furthermore, effective DevOps automation is iterative and adaptable, with teams continually assessing and refining their automation strategies in response to changing needs, technologies, and feedback. This proactive approach ensures that the automation remains resilient, scalable, and attuned to the organization's overarching objectives.
 
 Measuring the effectiveness of DevOps automation requires a set of KPIs (Key Performance Indicators) that encapsulate both the technical and cultural shifts intended by the DevOps movement. Here are some critical KPIs to consider:
 
@@ -128,6 +127,8 @@ By adhering to these best practices, teams can maximize the benefits of [DevOps 
 
 Embarking on the journey of DevOps automation can seem daunting given its expansive nature, but it's pivotal to start with a clear understanding of your organization's needs and pain points. Begin by identifying repetitive tasks, bottlenecks, and areas prone to human error, then prioritize them for automation. As you work through this, consider embracing tools like [Pulumi](https://www.pulumi.com/), which stands out for its unique approach to Infrastructure as Code. Pulumi allows you to define and manage infrastructure using popular programming languages you're already familiar with, thereby seamlessly integrating into existing development workflows. By leveraging such tools, and fostering a culture of collaboration and continuous improvement, organizations can unlock the full potential of DevOps automation, driving efficiency, reliability, and innovation in their software delivery processes.
 
-## Learn More
+## Conclusion
 
-Pulumi offers a truly modern approach to infrastructure as code. With Pulumi, you can create, deploy, and manage infrastructure on any cloud using the programming languages and tools you already know. [Get started today](/docs/get-started/).
+The point worth holding onto is that DevOps automation isn't a checklist of tools to bolt together. Its value comes from removing the manual handoffs between people, so a change can move from a developer's machine to production without anyone stopping to glue steps together by hand. That's why the KPIs that matter measure flow and recovery rather than tool count: you're optimizing how reliably work moves through the system, not how many scripts you've written. Treat automation as the thing that lets your teams spend their attention on decisions only humans can make, and the rest of the practice tends to fall into place.
+
+To see this in your own workflows, you can [get started with Pulumi](/docs/get-started/).

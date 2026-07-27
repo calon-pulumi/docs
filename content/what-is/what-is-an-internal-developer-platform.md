@@ -3,7 +3,6 @@ title: What is an Internal Developer Platform (IDP)?
 allow_long_title: true
 meta_desc: |
     Understand what an Internal Developer Platform (IDP) is, its benefits, key components, and how it streamlines development workflows.
-meta_image: /images/what-is/what-is-an-internal-developer-platform-meta.png
 type: what-is
 page_title: What is an Internal Developer Platform (IDP)?
 authors: ["sarah-hughes"]
@@ -71,7 +70,7 @@ Organizations that successfully implement IDPs realize several significant benef
 
 While closely related, Platform Engineering and Internal Developer Platforms are not the same:
 
-* **Platform Engineering** is the discipline and practice of designing, building, and maintaining developer platforms. It involves the people, processes, and cultural aspects of creating developer-centric infrastructure solutions.
+* **[Platform Engineering](/what-is/what-is-platform-engineering/)** is the discipline and practice of designing, building, and maintaining developer platforms. It involves the people, processes, and cultural aspects of creating developer-centric infrastructure solutions.
 * **Internal Developer Platforms** are the actual products that platform engineering teams build - the technical implementation that developers interact with daily.
 
 Think of Platform Engineering as the discipline, and the IDP as the product of that discipline.
@@ -130,8 +129,6 @@ Focus first on applications where developers are overwhelmed by infrastructure c
 
 ## Conclusion
 
-Internal Developer Platforms represent a significant evolution in how organizations approach infrastructure and developer experience. By abstracting complexity and providing standardized, self-service capabilities, IDPs enable developers to be more productive while ensuring that organizational standards for security, reliability, and compliance are maintained.
+An IDP is not a product you buy or a portal you stand up once. It's the encoding of your organization's golden paths into self-service workflows, which means the platform is only as good as the standards and feedback loops behind it. That's why the IDPs that work start narrow, on the teams drowning in infrastructure friction, and earn the right to expand. Treat it as a product with real users rather than a one-time migration, and it keeps paying back as your infrastructure grows more complex.
 
-As cloud infrastructure continues to grow in complexity, IDPs will become increasingly important for organizations that want to maintain developer velocity and satisfaction while managing costs and risks.
-
-Pulumi provides a comprehensive foundation for building Internal Developer Platforms that scale with your organization's needs. [Request a demo](/request-a-demo) to learn how Pulumi can help you build an IDP, or [get started with Pulumi](/docs/get-started) today.
+[Get started with Pulumi](/docs/get-started) when you're ready to build one.

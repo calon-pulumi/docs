@@ -1,5 +1,4 @@
 const { HtmlUrlChecker } = require("broken-link-checker");
-const { WebClient, LogLevel } = require('@slack/web-api');
 const httpServer = require("http-server");
 const Sitemapper = require("sitemapper").default;
 const sitemap = new Sitemapper();
@@ -22,6 +21,10 @@ function isInternalLink(url) {
         return false;
     }
 }
+
+// Path of the file the checker writes its final results to. Downstream tooling
+// (the link-fix workflow) reads this and hands it to the Claude Code action.
+const RESULTS_FILE = ".broken-links.json";
 
 // Additional routes to check that are not included in the sitemap.
 const additionalRoutes = [
@@ -188,42 +191,35 @@ async function onComplete(brokenLinks) {
 
     const totalFiltered = filteredInternal.length + filteredExternal.length;
 
-    if (totalFiltered > 0) {
-
-        // If we failed and a retry count was provided, retry. Note that retry count !==
-        // run count, so a retry count of 1 means run once, then retry once, which means a
-        // total run count of two.
-        if (maxRetries > 0 && retryCount < maxRetries) {
-            retryCount += 1;
-            console.log(`Retrying (${retryCount} of ${maxRetries})...`);
-            checkLinks();
-            return;
-        }
-
-        // Post internal broken links first (if any)
-        if (filteredInternal.length > 0) {
-            const internalList = filteredInternal
-                .map(link => `:link: <${link.source}|${new URL(link.source).pathname}> → ${link.destination} (${link.reason})`)
-                .join("\n");
-
-            const internalMessage = `:pulumipus-jedi: *Internal Broken Links (${filteredInternal.length} found)*\nThese are links within pulumi.com that need attention:\n\n${internalList}`;
-
-            console.warn("Posting internal broken links to Slack: " + internalList);
-            await postToSlack("docs-ops", internalMessage);
-        }
-
-        // Post external broken links second (if any)
-        if (filteredExternal.length > 0) {
-            const externalList = filteredExternal
-                .map(link => `:link: <${link.source}|${new URL(link.source).pathname}> → ${link.destination} (${link.reason})`)
-                .join("\n");
-
-            const externalMessage = `:pulumipus-sith: *External Broken Links (${filteredExternal.length} found)*\nThese are links to third-party sites (may be false positives due to bot protection):\n\n${externalList}`;
-
-            console.warn("Posting external broken links to Slack: " + externalList);
-            await postToSlack("docs-ops", externalMessage);
-        }
+    // If we failed and a retry count was provided, retry. Note that retry count !==
+    // run count, so a retry count of 1 means run once, then retry once, which means a
+    // total run count of two.
+    if (totalFiltered > 0 && maxRetries > 0 && retryCount < maxRetries) {
+        retryCount += 1;
+        console.log(`Retrying (${retryCount} of ${maxRetries})...`);
+        checkLinks();
+        return;
     }
+
+    // Write the final results to disk for downstream tooling. We write on every
+    // final pass — including clean runs, which produce empty lists — so the
+    // workflow can branch on the contents and stay silent when nothing is
+    // broken. Slack posting now happens at the workflow level (the link-fix PR
+    // link), not here. Broken links are already logged to the console as they're
+    // found, in onLink.
+    writeResults(filteredInternal, filteredExternal);
+}
+
+// Writes the final broken-link results to RESULTS_FILE in the shape downstream
+// tooling expects: a generation timestamp plus separate internal/external lists.
+function writeResults(internal, external) {
+    const results = {
+        generated: new Date().toISOString(),
+        internal,
+        external,
+    };
+    fs.writeFileSync(RESULTS_FILE, JSON.stringify(results, null, 2) + "\n");
+    console.log(`Wrote ${internal.length + external.length} broken link(s) to ${RESULTS_FILE}.`);
 }
 
 /**
@@ -246,6 +242,7 @@ function getDefaultExcludedKeywords() {
         "/docs/get-started/install/versions",
         "https://api.pulumi.com/",
         "https://github.com/pulls?",
+        "https://github.com/pulumi/pulumi/projects", // additionalRoutes crawls github.com/pulumi/pulumi; GitHub's own page links to its now-deprecated /projects tab (HTTP 400). Not in our content.
         "https://github.com/pulumi/docs/edit/master",
         "https://github.com/pulumi/docs/issues/new",
         "https://github.com/pulumi/registry/edit/master",
@@ -415,7 +412,17 @@ function getDefaultExcludedKeywords() {
         // Old internal URLs with working S3 redirects (issue #17449)
         "https://www.pulumi.com/docs/cli/commands/pulumi_plugin_install",
         "https://www.pulumi.com/docs/cli/commands/pulumi_schema_check",
-        "https://www.pulumi.com/docs/using-pulumi/crossguard/compliance-ready-policies/",
+        "https://www.pulumi.com/docs/using-pulumi/crossguard/compliance-ready-policies",                  // S3-redirects to github.com/pulumi/compliance-policies; substring covers /, /index.html, and anchor variants
+        // Old internal URLs with working S3 redirects, flagged on the 2026-06-16 run
+        "https://www.pulumi.com/docs/iac/packages-and-automation/crossguard/compliance-ready-policies",  // blog/deployment-guardrails-with-policy-as-code, blog/devsecops-strategy-...-tivity-health: S3 → github.com/pulumi/compliance-policies (cross-host redirect BLC mishandles)
+        "https://www.pulumi.com/docs/iac/packages-and-automation/crossguard/awsguard",                   // blog/deployment-guardrails-with-policy-as-code: S3 → github.com/pulumi/pulumi-policy-aws
+        "https://www.pulumi.com/docs/iac/clouds/kubernetes/guides/cluster-services/",                    // blog/getting-started-with-k8s-part6, blog/inside-crosswalk-for-kubernetes: S3 → /docs/integrations/clouds/kubernetes/
+        "https://www.pulumi.com/docs/iac/clouds/aws/guides/cloudwatch",                                  // blog/introducing-pulumi-crosswalk-for-aws-the-easiest-way-to-aws: S3 → /docs/iac/guides/clouds/aws/ (sub-page deleted; anchors no longer apply)
+        "https://www.pulumi.com/docs/pulumi-cloud/access-management/oidc/client/",                       // blog/unified-programmatic-approach-...-bmw, docs/reference/cloud-rest-api/organizations (from OpenAPI spec): S3 → /docs/administration/access-identity/oidc-issuers/
+        // Old internal URLs with working S3 redirects, recurring false positives after PR #19980 (2026-06-30, 2026-07-02)
+        "https://www.pulumi.com/docs/iac/clouds/kubernetes/guides/playbooks/",                          // blog/2019-year-at-a-glance, blog/aws-enterprise-container-management, blog/beyond-yaml-kubernetes-2026-automation-era: S3 → /docs/integrations/clouds/kubernetes/ (transient CloudFront cache misses re-flag it)
+        "https://www.pulumi.com/docs/using-pulumi/crossguard/awsguard/",                                // blog/2019-year-at-a-glance, blog/getting-started-with-pac, blog/pulumi-2020-update: S3 → github.com/pulumi/pulumi-policy-aws (cross-host redirect BLC mishandles)
+        "https://www.pulumi.com/blog/relaunching-pulumis-public-roadmap/",                              // blog/2021-end-of-year-review: S3 → /blog/ (post never migrated, redirect added in #19541)
         // External links reported as broken in issue #17495
         "https://roadmap.sh/videos/scaling-the-unscalable",
         "https://redis.io/docs/ui/cli/",
@@ -430,6 +437,26 @@ function getDefaultExcludedKeywords() {
         "https://www.zdnet.com/",                                                   // aggressive bot protection
         "https://gist.github.com/pulumipus/56d1ee83f295971e2a26a8091880c482",        // deleted gist in blog/automation-api-as-platform
         "https://gist.github.com/pulumipus/61edcdd8ab3f50a42b4bd34a7e1f789b",        // deleted gist in blog/automation-api-workflow
+        // Dead/transient third-party links in historical blog posts (#docs-ops 2026-06-01)
+        "https://github.com/aws/aws-lambda-runtime-interface-clients",              // blog/aws-lambda-container-support
+        "https://docs.docker.com/docker-for-mac/kubernetes/",                       // blog/how-to-deploy-jenkins-to-kubernetes-with-pulumi
+        "https://editor.swagger.io",                                                // blog/next-level-iac-pulumi-automation-api (transient 504)
+        "https://github.com/ollama/ollama/blob/main/docs/openai.md",                // blog/run-deepseek-on-aws-ec2-using-pulumi
+        "https://events.linuxfoundation.org/kubecon-cloudnativecon-europe-2026/",   // blog/kubecon-eu-2026-recap: post-event page returns 504 consistently, no replacement
+        "https://greenparksports.com/",                                             // blog/organizational-patterns-infra-repo: company site 404, no replacement
+        // Pulumi/GitHub status pages — AWS WAF (CloudFront) returns 405 with x-amzn-waf-action: captcha to all automated clients. Live in browsers. (2026-06-05 run flagged 1190+ from the footer badge)
+        "https://pulumi.statuspage.io/",                                            // global footer badge (layouts/partials/footer/statuspage-badge.html)
+        "https://status.pulumi.com",                                                // docs/iac/operations/troubleshooting/server-errors
+        "https://www.githubstatus.com/",                                            // referenced from github.com/pulumi/pulumi crawl; bot-protected
+        "https://github.com/pulumi/pulumi/stargazers",                              // blog/pulumi-up-2024: GitHub 404s the anonymous /stargazers view for every repo; valid in a browser
+        "https://github.com/pulumi/pulumi/watchers",                                // referenced from github.com/pulumi/pulumi crawl: GitHub 404s the anonymous /watchers view for every repo; valid in a browser (same pattern as /stargazers above)
+        // Recurring false positives flagged on 2026-07-23 — S3 redirects committed, but registry/build overwrites or CloudFront cache-miss re-flags them
+        "https://www.pulumi.com/registry/packages/azure/api-docs/voice/",           // blog/azure-v6-release: S3 redirect in scripts/redirects/general-broken-links-redirects.txt (added in #20366) keeps getting overwritten by the registry build
+        "https://www.pulumi.com/docs/iac/clouds/kubernetes/guides/control-plane",   // blog/inside-crosswalk-for-kubernetes: S3 → /docs/integrations/clouds/kubernetes/ (same family as excluded cluster-services/, playbooks/)
+        "https://www.pulumi.com/docs/iac/clouds/kubernetes/guides/configure-defaults", // blog/inside-crosswalk-for-kubernetes: S3 → /docs/integrations/clouds/kubernetes/
+        "https://www.pulumi.com/docs/iac/clouds/kubernetes/guides/app-services",    // blog/inside-crosswalk-for-kubernetes: S3 → /docs/integrations/clouds/kubernetes/
+        "https://www.pulumi.com/docs/iac/clouds/kubernetes/guides/apps",            // blog/inside-crosswalk-for-kubernetes: S3 → /docs/integrations/clouds/kubernetes/
+        "https://ieeexplore.ieee.org/",                                             // blog/aws-iam-access-analyzer-and-crossguard: IEEE returns HTTP 418 (I'm a teapot) to automated clients; loads in browsers
     ];
 }
 
@@ -477,25 +504,6 @@ function excludeAcceptable(links) {
         // https://github.com/stevenvachon/broken-link-checker/blob/43770535ad7b84cadec9dc54c5140694389e33dc/lib/internal/streamHTML.js#L36-L39
         .filter(b => !b.reason.startsWith(`Expected type "text/html"`))
     );
-}
-
-// Posts a message to the designated Slack channel.
-async function postToSlack(channel, text) {
-    const token = process.env.SLACK_ACCESS_TOKEN;
-
-    if (!token) {
-        console.warn("No SLACK_ACCESS_TOKEN on the environment. Skipping.");
-        return;
-    }
-
-    const client = new WebClient(token, { logLevel: LogLevel.ERROR });
-    return await client.chat.postMessage({
-        text,
-        channel: `#${channel}`,
-        as_user: true,
-        mrkdwn: true,
-        unfurl_links: false,
-    });
 }
 
 // Adds a broken link to the running list.

@@ -1,9 +1,10 @@
 ---
 title: "Pulumi Neo - Your AI Infrastructure Agent"
-layout: product-page
+layout: template-page
 type: page
 aliases:
   - /neo
+  - /gads/neo
   - /copilot
   - /product/copilot
   - /product/pulumi-copilot
@@ -15,6 +16,7 @@ aliases:
 meta_title: "Pulumi Neo - Your AI Platform Engineer"
 meta_desc: "Meet Neo, your AI platform engineer. Automate infrastructure provisioning, governance, and optimization with enterprise controls."
 meta_image: /images/product/neo/neo-meta.png
+include_floqer: true
 
 sections:
   - type: hero
@@ -32,7 +34,7 @@ sections:
     description: |
       **Enterprise-grade AI for cloud automation.**
 
-      Neo is the industry's first AI agent built from the ground up to execute, govern, and optimize complex cloud automation at enterprise scale. Unlike generic AI tools, Neo understands infrastructure dependencies, respects your policies, and works within your existing Pulumi governance.
+      Pulumi's code-first platform already works great with the coding agents your team loves — Claude Code, Codex, Cursor, and more — and our [agent skills](/docs/ai/skills/) make them even better. Want the best infrastructure agent right out of the box? That's Neo: the industry's first AI agent built from the ground up to execute, govern, and optimize complex cloud automation at enterprise scale. Neo understands infrastructure dependencies, respects your policies, and works within your existing Pulumi governance.
     cards:
       - icon: code
         title: Faster provisioning
@@ -70,7 +72,6 @@ sections:
     anchor: capabilities
 
   - type: three_column
-    icon_style: black
     icon_layout: above
     columns:
       - icon: chat-circle-dots
@@ -106,7 +107,7 @@ sections:
     highlight_first_card: true
     columns:
       - title: Experience Neo today
-        description: Neo is available in preview for all Pulumi users. Experience the future of platform engineering automation.
+        description: Neo is generally available to all Pulumi users. Experience the future of platform engineering automation.
         cta_primary_text: Start Free
         cta_primary_link: https://app.pulumi.com/signup
         cta_text: Book a Demo

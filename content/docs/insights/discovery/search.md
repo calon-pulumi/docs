@@ -3,7 +3,6 @@ title: Resource Search
 title_tag: "Pulumi Insights: Resource Search"
 h1: Resource Search
 meta_desc: Documentation and query syntax for the Pulumi Insights search feature.
-meta_image: /images/docs/meta-images/docs-meta.png
 menu:
   insights:
     name: Resource Search
@@ -330,7 +329,7 @@ For example, you would normally write something like `.tags.stack:production` to
 
 > .tags:
 
-If we want to refine this to resources with _some_ tags but no `"stack"` tag specifically, we can can write a query like so:
+If we want to refine this to resources with _some_ tags but no `"stack"` tag specifically, we can write a query like so:
 
 > .tags: -.tags.stack:
 

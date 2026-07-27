@@ -4,7 +4,6 @@ meta_desc: This page provides an overview of how to configure OIDC Issuers in Pu
            to establish trust relationships with third-party OIDC providers.
 title: OIDC Issuers
 h1: OIDC Issuers
-meta_image: /images/docs/meta-images/docs-meta.png
 menu:
   administration:
     parent: administration-access-identity
@@ -96,6 +95,8 @@ When you register a new OIDC Issuer, Pulumi Cloud provisions a default authoriza
 Each policy must state the **Token type** the policy issues (Organization, Team, Personal, or Deployment Runner) and the team or user the token is scoped to.
 
 We recommend verifying the token's audience and subject claims against the provider's security guidance. For example, a GitHub Actions policy commonly checks `aud` against `urn:pulumi:org:<org-name>` and `sub` against `repo:<organization>/<repo>:*`.
+
+When a token's claims match more than one policy, **deny always takes precedence over allow**, regardless of how the policies are ordered or how specific each policy's claim match is.
 
 To target nested claims, define the claim path. Given this token payload:
 

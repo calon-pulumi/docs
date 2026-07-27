@@ -21,7 +21,6 @@ meta_desc: The Helm Release resource is now GA. This adds native support for Hel
 # The meta_image appears in social-media previews and on the blog home page.
 # A placeholder image representing the recommended format, dimensions and aspect
 # ratio has been provided for you.
-meta_image: "k8s-helm-release.png"
 
 # At least one author is required. The values in this list correspond with the `id`
 # properties of the team member files at /data/team/team. Create a file for yourself
@@ -31,11 +30,13 @@ authors:
 
 # At least one tag is required. Lowercase, hyphen-delimited is recommended.
 tags:
-    - "Kubernetes"
-    - "helm"
+    - kubernetes
+    - helm
+category: product
 
 # See the blogging docs at https://github.com/pulumi/docs/blob/master/BLOGGING.md.
 # for additional details, and please remove these comments before submitting for review.
+faq_schema: true
 ---
 
 Back in September 2021 we announced [public preview](/blog/full-access-to-helm-features-through-new-helm-release-resource-for-kubernetes/) for the Helm Release resource in Pulumi's Kubernetes provider. Over the last few months, we have had a very encouraging uptake in usage and several meaningful discussions with users in the community that have helped shape improvements to this resource. Thanks to this collaboration, we are now pleased to announce that the [Helm Release](/registry/packages/kubernetes/api-docs/helm/v3/release/) resource is now **GA** (generally available) starting in [v3.15.0](https://github.com/pulumi/pulumi-kubernetes/releases/tag/v3.15.0) of the Pulumi Kubernetes Provider and SDK in all Pulumi supported languages. We are excited to offer yet another tool to Pulumi users to effectively manage their Kubernetes footprint.
@@ -400,7 +401,7 @@ Thanks to our community of early adopters, we received excellent feedback on the
 * Honor namespace specification for all resources installed by Helm Release [[#1747](https://github.com/pulumi/pulumi-kubernetes/pull/1747)]
 * Make `values` optional [[#1761]](https://github.com/pulumi/pulumi-kubernetes/pull/1761)
 * Make `RepositoryOpts` optional [[#1806]](https://github.com/pulumi/pulumi-kubernetes/pull/1806)
-* Suppport local charts [[#1809]](https://github.com/pulumi/pulumi-kubernetes/pull/1809)
+* Support local charts [[#1809]](https://github.com/pulumi/pulumi-kubernetes/pull/1809)
 * Add import support [[#1818]](https://github.com/pulumi/pulumi-kubernetes/pull/1818)
 * Support loading values from yaml files [[#1828]](https://github.com/pulumi/pulumi-kubernetes/pull/1828)
 
