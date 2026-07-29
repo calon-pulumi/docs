@@ -29,7 +29,11 @@ If you are managing Terraform state in S3, Azure Blob Storage, or another DIY ba
 
 ## How it works
 
-Pulumi Cloud implements the [Terraform remote backend API](https://developer.hashicorp.com/terraform/language/backend/remote). This means you can point the Terraform CLI at Pulumi Cloud using the standard `backend "remote"` configuration block — no changes to your Terraform code or workflow are required.
+Pulumi Cloud implements the [Terraform remote backend API](https://developer.hashicorp.com/terraform/language/backend/remote). You can point the Terraform CLI at Pulumi Cloud using the standard `backend "remote"` configuration block or the newer `cloud` block — no changes to your Terraform code or workflow are required.
+
+{{% notes "info" %}}
+Pulumi Cloud also supports [remote execution](/docs/iac/get-started/terraform/terraform-remote-execution/) — running your plans and applies on Pulumi Cloud's managed infrastructure instead of your local machine.
+{{% /notes %}}
 
 ### Concept mapping
 
@@ -433,7 +437,7 @@ You can run [audit (detective) policy packs](/docs/insights/policy/policy-groups
 To configure audit policies for a Terraform stack, add the stack to an [audit policy group](/docs/insights/policy/policy-groups/) in Insights. Policy packs are then evaluated continuously against the stack's resources.
 
 {{% notes "info" %}}
-Only audit (detective) policies are supported for Terraform-managed stacks. Preventative policies require a Pulumi program and are not applicable to stacks updated via the Terraform CLI. The schema mapping works automatically for [bridged providers](/docs/iac/concepts/resources/providers/) but does not currently cover native Pulumi providers like Kubernetes.
+Stacks using local execution mode support audit (detective) policies only. Stacks using [remote execution](/docs/iac/get-started/terraform/terraform-remote-execution/) also support preventative policies, which evaluate against the plan and can block an apply. Policy packs that target [bridged providers](/docs/iac/concepts/resources/providers/) work automatically, since Terraform resources map to their bridged equivalents. Policy packs that target native Pulumi providers (like the Kubernetes provider) do not apply to Terraform stacks, since Terraform does not use those providers.
 {{% /notes %}}
 
 ### Restoring a previous state version
@@ -449,13 +453,17 @@ You can find version numbers in the stack's **Activity** tab in the Pulumi Cloud
 
 ## FAQ
 
-### Can I use drift detection or Pulumi Deployments with Terraform-managed stacks?
+### Can I run plans and applies remotely?
 
-Not currently. Drift detection and [Pulumi Deployments](/docs/pulumi-cloud/deployments/) require a Pulumi program to execute. If you want these features, you can [convert your Terraform code to Pulumi](/docs/iac/get-started/terraform/convert-hcl/) and then run updates with the Pulumi CLI.
+Yes. Pulumi Cloud can execute your Terraform and OpenTofu plans and applies remotely using managed infrastructure. See [Remote Execution](/docs/iac/get-started/terraform/terraform-remote-execution/) for setup instructions.
+
+### Can I use drift detection with Terraform-managed stacks?
+
+Not currently. Drift detection requires a Pulumi program. If you want this feature, you can [convert your Terraform code to Pulumi](/docs/iac/get-started/terraform/convert-hcl/) and run updates with the Pulumi CLI.
 
 ### Can I use preventative policies?
 
-Preventative policies run during `pulumi preview` and `pulumi up`, which are Pulumi CLI operations. Since Terraform-managed stacks are updated via the Terraform CLI, only audit (detective) policies are supported. See [audit policies](#audit-policies) above.
+Yes, with [remote execution](/docs/iac/get-started/terraform/terraform-remote-execution/). When a plan runs remotely on Pulumi Cloud, preventative policies evaluate against the plan before an apply proceeds — violations block the apply. For stacks using local execution mode, only audit (detective) policies are supported. See [audit policies](#audit-policies) above.
 
 ### How do update diffs work for Terraform stacks?
 
