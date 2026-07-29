@@ -20,6 +20,21 @@
         {{- end }}
     </script>
 
+    {{- /* A/B test 20260723-mktg-ctas anti-flicker (homepage only): hold the
+           hero secondary CTA hidden (space reserved) before first paint so its
+           label doesn't visibly flip while GrowthBook resolves the variant.
+           mktg-ctas-experiment.ts reveals it on resolve; the timeout is a
+           safety net so a slow/blocked GrowthBook can never leave it hidden. */ -}}
+    {{ if .IsHome }}
+    <style>html.mktg-ctas-pending a[data-role="cta-secondary"]{visibility:hidden}</style>
+    <script>
+        document.documentElement.classList.add("mktg-ctas-pending");
+        window.setTimeout(function () {
+            document.documentElement.classList.remove("mktg-ctas-pending");
+        }, 400);
+    </script>
+    {{ end }}
+
     <!-- Preconnect to Segment (used on every page). -->
     <link rel="preconnect" href="https://cdn.segment.com" crossorigin />
     <!-- Preconnect to GrowthBook (A/B testing, used on every page). -->
@@ -27,6 +42,8 @@
     {{- if eq hugo.Environment "production" }}
     <!-- Preconnect to Common Room (production only). -->
     <link rel="preconnect" href="https://cdn.cr-relay.com" crossorigin />
+    <!-- Preconnect to OpenAI ad pixel CDN (production only). -->
+    <link rel="preconnect" href="https://bzrcdn.openai.com" crossorigin />
     {{- end }}
 
     <!-- Preload critical fonts (skip monospace on the homepage — not used above the fold). -->
@@ -479,6 +496,22 @@
                     }, {})
                 );
                 document.head.appendChild(script);
+            });
+        </script>
+
+        <!-- OpenAI ad pixel (deferred to window.load to avoid blocking first paint) — Marketing & Analytics
+             consent-gated: loads only after the consent-managed Segment analytics is ready
+             (window.analytics.ready), same as the Floqer integration below. Fail-closed: if
+             consent-managed analytics never loads, the pixel never loads. -->
+        <script>
+            window.addEventListener('load', function() {
+                function loadOaiq() {
+                    !function(w,d,s,u){if(w.oaiq)return;var q=function(){q.q.push(arguments)};q.q=[];w.oaiq=q;var j=d.createElement(s);j.async=1;j.src=u;var f=d.getElementsByTagName(s)[0];f.parentNode.insertBefore(j,f)}(window,document,"script","https://bzrcdn.openai.com/sdk/oaiq.min.js");
+                    oaiq("init",{pixelId:"7KRuATZtZE3j5BSAZErZAb",debug:false});
+                }
+                if (window.analytics && typeof window.analytics.ready === "function") {
+                    window.analytics.ready(loadOaiq);
+                }
             });
         </script>
 
